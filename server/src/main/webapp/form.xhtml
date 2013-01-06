@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+
+<ui:composition template="/layout/template.xhtml">
+	<ui:param name="selectedMenuId" value="form-jsf" />
+
+    <ui:define name="title">Patient: {{patientCode}}</ui:define>
+
+    <ui:define name="content">
+		
+<script>
+
+</script>
+
+
+
+	<!--  start content-table-inner -->
+	<div id="content-table-inner">
+	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	<tr valign="top">
+	<td>
+	
+		<!--  start step-holder -->
+		<div id="step-holder">
+			<div class="step-no">1</div>
+			<div class="step-dark-left"><a href="">Personal data</a></div>
+			<div class="step-dark-right">&nbsp;</div>
+			<div class="step-no-off">2</div>
+			<div class="step-light-left">Select related products</div>
+			<div class="step-light-right">&nbsp;</div>
+			<div class="step-no-off">3</div>
+			<div class="step-light-left">Preview</div>
+			<div class="step-light-round">&nbsp;</div>
+			<div class="clear"></div>
+		</div>
+		<!--  end step-holder -->
+	
+		<!-- start id-form -->
+		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
+		<tr>
+			<th valign="top">Code:</th>
+			<td><input type="text" class="inp-form" ng-model="patientCode"/></td>
+			<td></td>
+		</tr>
+
+		<tr>
+			<th valign="top" id="name_desc">Surname:</th>
+			<td><input id="name_input" type="text" class="inp-form-error" /></td>
+			<td>
+			<div id="name_msg">
+				<div class="error-left"></div>
+				<div class="error-inner" id="name_msg_value">This field is required.</div>
+			</div>
+			</td>
+		</tr>
+
+		<tr>
+			<th valign="top">Name:</th>
+			<td><input type="text" class="inp-form" ng-model="patientCode"/></td>
+			<td></td>
+		</tr>
+
+		<tr>
+		<th valign="top">Category:</th>
+		<td>	
+		<select  class="styledselect_form_1">
+			<option value="">All</option>
+			<option value="">Products</option>
+			<option value="">Categories</option>
+			<option value="">Clients</option>
+			<option value="">News</option>
+		</select>
+		</td>
+		<td></td>
+		</tr>
+		<tr>
+		<th valign="top">Sub Category:</th>
+		<td>	
+		<select  class="styledselect_form_1">
+			<option value="">All</option>
+			<option value="">Products</option>
+			<option value="">Categories</option>
+			<option value="">Clients</option>
+			<option value="">News</option>
+		</select>
+		</td>
+		<td></td>
+		</tr> 
+		<tr>
+			<th valign="top">Price:</th>
+			<td><input type="text" class="inp-form" /></td>
+			<td></td>
+		</tr>
+		<tr>
+		<th valign="top">Select a date:</th>
+		<td class="noheight">
+			<form id="chooseDateForm" action="#">
+			<table border="0" cellpadding="0" cellspacing="0">
+			<tr  valign="top">
+				<td>
+				<select id="d" class="styledselect-day">
+					<option value="">dd</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>
+					<option value="24">24</option>
+					<option value="25">25</option>
+					<option value="26">26</option>
+					<option value="27">27</option>
+					<option value="28">28</option>
+					<option value="29">29</option>
+					<option value="30">30</option>
+					<option value="31">31</option>
+				</select>
+				</td>
+				<td>
+					<select id="m" class="styledselect-month">
+						<option value="">mmm</option>
+						<option value="1">Jan</option>
+						<option value="2">Feb</option>
+						<option value="3">Mar</option>
+						<option value="4">Apr</option>
+						<option value="5">May</option>
+						<option value="6">Jun</option>
+						<option value="7">Jul</option>
+						<option value="8">Aug</option>
+						<option value="9">Sep</option>
+						<option value="10">Oct</option>
+						<option value="11">Nov</option>
+						<option value="12">Dec</option>
+					</select>
+				</td>
+				<td>
+					<select  id="y"  class="styledselect-year">
+						<option value="">yyyy</option>
+						<option value="2005">2005</option>
+						<option value="2006">2006</option>
+						<option value="2007">2007</option>
+						<option value="2008">2008</option>
+						<option value="2009">2009</option>
+						<option value="2010">2010</option>
+						<option value="2011">2011</option>
+						<option value="2012">2012</option>
+						<option value="2013">2013</option>
+						<option value="2014">2014</option>
+					</select>
+				</td>
+				<td><a href=""  id="date-pick"><img src="#{ctxRoot}images/forms/icon_calendar.jpg"   alt="" /></a></td>
+			</tr>
+			</table>
+			</form>
+		
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+		<th valign="top">Description:</th>
+		<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
+		<td></td>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td valign="top">
+			<input type="button" value="" class="form-submit" />
+			<input type="reset" value="" class="form-reset"  />
+		</td>
+		<td></td>
+	</tr>
+	</table>
+	<!-- end id-form  -->
+
+	</td>
+	<td>
+
+</td>
+</tr>
+<tr>
+<td><img src="#{ctxRoot}images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
+<td></td>
+</tr>
+</table>
+ 
+<div class="clear"></div>
+ 
+
+</div>
+<!--  end content-table-inner  -->
+
+
+ 
+
+
+
+
+
+
+    </ui:define>
+
+</ui:composition>
+</html>

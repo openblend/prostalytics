@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+
+<ui:composition template="/layout/template.xhtml">
+	<ui:param name="selectedMenuId" value="browse-jsf" />
+
+    <ui:define name="title">Browse</ui:define>
+	
+    <ui:define name="content">
+    	<script>
+        function PatientListCtrl($scope, $http) {
+            /* $scope.patients = [
+	            {
+	                "id": "123",
+	                "code": "2435fd",
+	                "surname": "Novak",
+	                "name": "Janez",
+	                "birthDate": "01.01.1970",
+	            	"externalId": "kart12345"
+	            },
+	            {
+	                "id": "456",
+	                "code": "2435fd",
+	                "surname": "Žandar",
+	                "name": "Miloš",
+	                "birthDate": "01.01.1971",
+	            	"externalId": "kart12345"
+	            },
+	            {
+	                "id": "12345",
+	                "code": "2435fd",
+	                "surname": "Čuri",
+	                "name": "Muri",
+	                "birthDate": "01.01.1970",
+	            	"externalId": "kart12345"
+	            }
+            ]; */
+
+            $http.get('#{ctxRoot}rest-mock/patients.json').success(function(data) {
+            	  $scope.patients = data;
+            });
+            
+            $scope.openForm = function(id){
+                window.location='#{ctxRoot}form.jsf?id=' + id;
+            }
+
+        }
+
+    	</script>
+    
+    
+		<!--  start content-table-inner ...................................................................... START -->
+		<div id="content-table-inner">
+		
+			<!--  start table-content  -->
+			<div id="table-content" ng-controller="PatientListCtrl">
+		
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+				<tr>
+					<th class="table-header-repeat line-left">Code</th>
+					<th class="table-header-repeat line-left minwidth-1">Last name</th>
+					<th class="table-header-repeat line-left minwidth-1">First name</th>
+					<th class="table-header-repeat line-left">Birth date</th>
+					<th class="table-header-repeat line-left">External ID</th>
+				</tr>
+				<tbody ng-repeat="patient in patients" >
+				<tr ng-class-even="'alternate-row'" style="cursor: pointer;" ng-click="openForm(patient.id);">
+					<td>{{patient.code}}</td>
+					<td>{{patient.surname}}</td>
+					<td>{{patient.name}}</td>
+					<td>{{patient.birthDate}}</td>
+					<td>{{patient.externalId}}</td>
+				</tr>
+				</tbody>
+				
+				</table>
+				<!--  end product-table................................... --> 
+			</div>
+		</div>
+
+
+
+
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -13,6 +13,15 @@
     <ui:define name="content">
 		
 <script>
+function PatientFormCtrl($scope, $http) {
+
+	var id = getURLParameter('id');
+	
+    $http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
+    	  $scope.patient = data;
+    });
+
+}
 
 </script>
 
@@ -21,7 +30,7 @@
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
 	
-	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
 	<tr valign="top">
 	<td>
 	
@@ -44,13 +53,13 @@
 		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
 		<tr>
 			<th valign="top">Code:</th>
-			<td><input type="text" class="inp-form" ng-model="patientCode"/></td>
+			<td><input type="text" class="inp-form" ng-model="patientCode" value="{{patient.code}}"/></td>
 			<td></td>
 		</tr>
 
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<td><input id="name_input" type="text" class="inp-form-error" /></td>
+			<td><input id="name_input" type="text" class="inp-form-error" value="{{patient.surname}}" /></td>
 			<td>
 			<div id="name_msg">
 				<div class="error-left"></div>
@@ -61,7 +70,7 @@
 
 		<tr>
 			<th valign="top">Name:</th>
-			<td><input type="text" class="inp-form" ng-model="patientCode"/></td>
+			<td><input type="text" class="inp-form" value="{{patient.name}}" /></td>
 			<td></td>
 		</tr>
 

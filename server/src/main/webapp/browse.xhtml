@@ -13,32 +13,6 @@
     <ui:define name="content">
     	<script>
         function PatientListCtrl($scope, $http) {
-            /* $scope.patients = [
-	            {
-	                "id": "123",
-	                "code": "2435fd",
-	                "surname": "Novak",
-	                "name": "Janez",
-	                "birthDate": "01.01.1970",
-	            	"externalId": "kart12345"
-	            },
-	            {
-	                "id": "456",
-	                "code": "2435fd",
-	                "surname": "Žandar",
-	                "name": "Miloš",
-	                "birthDate": "01.01.1971",
-	            	"externalId": "kart12345"
-	            },
-	            {
-	                "id": "12345",
-	                "code": "2435fd",
-	                "surname": "Čuri",
-	                "name": "Muri",
-	                "birthDate": "01.01.1970",
-	            	"externalId": "kart12345"
-	            }
-            ]; */
 
             $http.get('#{ctxRoot}rest-mock/patients.json').success(function(data) {
             	  $scope.patients = data;

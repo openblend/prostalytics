@@ -8,10 +8,7 @@
 <ui:composition template="/layout/template.xhtml">
 	<ui:param name="selectedMenuId" value="form-jsf" />
 
-    <ui:define name="title">Patient: {{patientCode}}</ui:define>
-
-    <ui:define name="content">
-		
+    <ui:define name="head">
 <script>
 function PatientFormCtrl($scope, $http) {
 
@@ -21,9 +18,21 @@ function PatientFormCtrl($scope, $http) {
     	  $scope.patient = data;
     });
 
+    $scope.postFormData = function() {
+		alert("posting: " + angular.toJson($scope.patient));
+
+    };
+    
 }
 
 </script>
+    
+	</ui:define>
+
+    <ui:define name="title">Patient: <span ng-controller="PatientFormCtrl">{{patient.code}}</span></ui:define>
+
+    <ui:define name="content">
+		
 
 
 
@@ -51,15 +60,10 @@ function PatientFormCtrl($scope, $http) {
 	
 		<!-- start id-form -->
 		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
-		<tr>
-			<th valign="top">Code:</th>
-			<td><input type="text" class="inp-form" ng-model="patientCode" value="{{patient.code}}"/></td>
-			<td></td>
-		</tr>
 
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<td><input id="name_input" type="text" class="inp-form-error" value="{{patient.surname}}" /></td>
+			<td><input id="name_input" type="text" class="inp-form-error" ng-model="patient.surname" /></td>
 			<td>
 			<div id="name_msg">
 				<div class="error-left"></div>
@@ -70,7 +74,7 @@ function PatientFormCtrl($scope, $http) {
 
 		<tr>
 			<th valign="top">Name:</th>
-			<td><input type="text" class="inp-form" value="{{patient.name}}" /></td>
+			<td><input type="text" class="inp-form" ng-model="patient.name" /></td>
 			<td></td>
 		</tr>
 
@@ -195,7 +199,7 @@ function PatientFormCtrl($scope, $http) {
 	<tr>
 		<th>&nbsp;</th>
 		<td valign="top">
-			<input type="button" value="" class="form-submit" />
+			<input type="button" value="" class="form-submit" ng-click="postFormData();"/>
 			<input type="reset" value="" class="form-reset"  />
 		</td>
 		<td></td>

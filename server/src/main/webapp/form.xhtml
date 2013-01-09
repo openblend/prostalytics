@@ -42,6 +42,7 @@ function PatientFormCtrl($scope, $http) {
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
 	<tr valign="top">
 	<td>
+		<form name="patientForm">
 	
 		<!--  start step-holder -->
 		<div id="step-holder">
@@ -63,9 +64,9 @@ function PatientFormCtrl($scope, $http) {
 
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<td><input id="name_input" type="text" class="inp-form-error" ng-model="patient.surname" /></td>
+			<td><input name="patient_surname" type="text" class="inp-form-error" ng-model="patient.surname" required="true" /></td>
 			<td>
-			<div id="name_msg">
+			<div id="name_msg" ng-show="!patientForm.patient_surname.$valid">
 				<div class="error-left"></div>
 				<div class="error-inner" id="name_msg_value">This field is required.</div>
 			</div>
@@ -205,8 +206,10 @@ function PatientFormCtrl($scope, $http) {
 		<td></td>
 	</tr>
 	</table>
+	</form>
 	<!-- end id-form  -->
-
+	
+	
 	</td>
 	<td>
 

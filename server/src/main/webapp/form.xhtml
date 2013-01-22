@@ -9,7 +9,9 @@
 	<ui:param name="selectedMenuId" value="form-jsf" />
 
     <ui:define name="head">
+
 <script>
+//<![CDATA[
 function PatientFormCtrl($scope, $http) {
 
 	var id = getURLParameter('id');
@@ -18,13 +20,22 @@ function PatientFormCtrl($scope, $http) {
     	  $scope.patient = data;
     });
 
-    $scope.postFormData = function() {
-		alert("posting: " + angular.toJson($scope.patient));
+    $scope.postFormData = function(form) {
+    	form.submitted = true;
+    	if (form.$valid) {
+			alert("posting: " + angular.toJson($scope.patient));
+		} else {
+			alert("incomplete");
+		}
+		
+	};
 
+	$scope.validateSurname = function(form) {
+ 		return (!form.patient_surname.$valid && (form.patient_surname.$dirty || form.submitted))
     };
     
 }
-
+//]]>
 </script>
     
 	</ui:define>
@@ -42,7 +53,7 @@ function PatientFormCtrl($scope, $http) {
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
 	<tr valign="top">
 	<td>
-		<form name="patientForm">
+		<form name="patientForm" novalidate="true">
 	
 		<!--  start step-holder -->
 		<div id="step-holder">
@@ -64,12 +75,15 @@ function PatientFormCtrl($scope, $http) {
 
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<td><input name="patient_surname" type="text" class="inp-form-error" ng-model="patient.surname" required="true" /></td>
+			<!-- td><input name="patient_surname" type="text" class="inp-form-error" ng-model="patient.surname" required="true" /></td-->
+			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td>
 			<td>
-			<div id="name_msg" ng-show="!patientForm.patient_surname.$valid">
+			
+			<div id="name_msg" ng-show="validateSurname(patientForm)">
 				<div class="error-left"></div>
 				<div class="error-inner" id="name_msg_value">This field is required.</div>
 			</div>
+			
 			</td>
 		</tr>
 
@@ -200,7 +214,7 @@ function PatientFormCtrl($scope, $http) {
 	<tr>
 		<th>&nbsp;</th>
 		<td valign="top">
-			<input type="button" value="" class="form-submit" ng-click="postFormData();"/>
+			<input type="button" value="" class="form-submit" ng-click="postFormData(patientForm);" />
 			<input type="reset" value="" class="form-reset"  />
 		</td>
 		<td></td>

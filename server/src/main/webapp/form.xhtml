@@ -30,10 +30,18 @@ function PatientFormCtrl($scope, $http) {
 		
 	};
 
-	$scope.validateSurname = function(form) {
- 		return (!form.patient_surname.$valid && (form.patient_surname.$dirty || form.submitted))
+	$scope.validateField = function(form, field) {
+ 		return (!field.$valid && (field.$dirty || form.submitted))
     };
-    
+
+    $scope.dateOptions = {
+    	dateFormat: "yy-mm-dd"
+    };
+
+    $scope.activeTab = 'personal';
+    $scope.switchTab = function(tabName) {
+    	$scope.activeTab = tabName;
+    }
 }
 //]]>
 </script>
@@ -53,16 +61,21 @@ function PatientFormCtrl($scope, $http) {
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
 	<tr valign="top">
 	<td>
-		<form name="patientForm" novalidate="true">
 	
 		<!--  start step-holder -->
 		<div id="step-holder">
 			<div class="step-no">1</div>
-			<div class="step-dark-left"><a href="">Personal data</a></div>
+			<div class="step-dark-left"
+					ng-click="switchTab('personal');">
+				Personal data</div>
 			<div class="step-dark-right">&nbsp;</div>
-			<div class="step-no-off">2</div>
-			<div class="step-light-left">Select related products</div>
-			<div class="step-light-right">&nbsp;</div>
+			
+			<div ng-class="{true:'step-no', false:'step-no-off'}[patientForm.$valid]">2</div>
+			<div ng-class="{true:'step-dark-left', false:'step-light-left'}[patientForm.$valid]" ng-click="switchTab('rrp');">
+				Osnovni rrp
+			</div>
+			<div ng-class="{true:'step-dark-right', false:'step-light-right'}[patientForm.$valid]">&nbsp;</div>
+			
 			<div class="step-no-off">3</div>
 			<div class="step-light-left">Preview</div>
 			<div class="step-light-round">&nbsp;</div>
@@ -70,27 +83,77 @@ function PatientFormCtrl($scope, $http) {
 		</div>
 		<!--  end step-holder -->
 	
+		<form name="patientForm" novalidate="true" ng-show="activeTab == 'personal'">
 		<!-- start id-form -->
-		<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
-
+		<table border="0" cellpadding="0" cellspacing="0"  class="formTable">
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<!-- td><input name="patient_surname" type="text" class="inp-form-error" ng-model="patient.surname" required="true" /></td-->
 			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td>
 			<td>
-			
-			<div id="name_msg" ng-show="validateSurname(patientForm)">
+			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_surname)">
 				<div class="error-left"></div>
-				<div class="error-inner" id="name_msg_value">This field is required.</div>
+				<div class="error-inner">This field is required.</div>
 			</div>
-			
 			</td>
 		</tr>
-
 		<tr>
 			<th valign="top">Name:</th>
-			<td><input type="text" class="inp-form" ng-model="patient.name" /></td>
+			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" required="true"/></td>
+			<td>
+			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_name)">
+				<div class="error-left"></div>
+				<div class="error-inner">This field is required.</div>
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<th valign="top">Bitrh date:</th>
+			<td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td>
+			<td>
+			<div id="name_msg" ng-show="validateField(patientForm, patientForm.date_birth)">
+				<div class="error-left"></div>
+				<div class="error-inner">This field is required.</div>
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<th valign="top">External ID:</th>
+			<td><input type="text" name="patient_ext_id" class="inp-form" ng-model="patient.extId" required="true"/></td>
+			<td>
+			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_ext_id)">
+				<div class="error-left"></div>
+				<div class="error-inner">This field is required.</div>
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td valign="top">
+				<input type="button" value="Save" class="form-submit" ng-click="postFormData(patientForm);" />
+				<!-- input type="button" value="" class="form-reset"  /-->
+			</td>
 			<td></td>
+		</tr>
+
+
+		</table>
+		</form>
+
+	
+	<!-- second tab -->
+
+		<form name="rrpForm" novalidate="true" class="formTable" ng-show="activeTab == 'rrp'">
+		<!-- start id-form -->
+		<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<th valign="top" id="name_desc">Surname:</th>
+			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td>
+			<td>
+			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_surname)">
+				<div class="error-left"></div>
+				<div class="error-inner">This field is required.</div>
+			</div>
+			</td>
 		</tr>
 
 		<tr>
@@ -124,88 +187,6 @@ function PatientFormCtrl($scope, $http) {
 			<td><input type="text" class="inp-form" /></td>
 			<td></td>
 		</tr>
-		<tr>
-		<th valign="top">Select a date:</th>
-		<td class="noheight">
-			<form id="chooseDateForm" action="#">
-			<table border="0" cellpadding="0" cellspacing="0">
-			<tr  valign="top">
-				<td>
-				<select id="d" class="styledselect-day">
-					<option value="">dd</option>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-					<option value="10">10</option>
-					<option value="11">11</option>
-					<option value="12">12</option>
-					<option value="13">13</option>
-					<option value="14">14</option>
-					<option value="15">15</option>
-					<option value="16">16</option>
-					<option value="17">17</option>
-					<option value="18">18</option>
-					<option value="19">19</option>
-					<option value="20">20</option>
-					<option value="21">21</option>
-					<option value="22">22</option>
-					<option value="23">23</option>
-					<option value="24">24</option>
-					<option value="25">25</option>
-					<option value="26">26</option>
-					<option value="27">27</option>
-					<option value="28">28</option>
-					<option value="29">29</option>
-					<option value="30">30</option>
-					<option value="31">31</option>
-				</select>
-				</td>
-				<td>
-					<select id="m" class="styledselect-month">
-						<option value="">mmm</option>
-						<option value="1">Jan</option>
-						<option value="2">Feb</option>
-						<option value="3">Mar</option>
-						<option value="4">Apr</option>
-						<option value="5">May</option>
-						<option value="6">Jun</option>
-						<option value="7">Jul</option>
-						<option value="8">Aug</option>
-						<option value="9">Sep</option>
-						<option value="10">Oct</option>
-						<option value="11">Nov</option>
-						<option value="12">Dec</option>
-					</select>
-				</td>
-				<td>
-					<select  id="y"  class="styledselect-year">
-						<option value="">yyyy</option>
-						<option value="2005">2005</option>
-						<option value="2006">2006</option>
-						<option value="2007">2007</option>
-						<option value="2008">2008</option>
-						<option value="2009">2009</option>
-						<option value="2010">2010</option>
-						<option value="2011">2011</option>
-						<option value="2012">2012</option>
-						<option value="2013">2013</option>
-						<option value="2014">2014</option>
-					</select>
-				</td>
-				<td><a href=""  id="date-pick"><img src="#{ctxRoot}images/forms/icon_calendar.jpg"   alt="" /></a></td>
-			</tr>
-			</table>
-			</form>
-		
-		</td>
-		<td></td>
-	</tr>
 	<tr>
 		<th valign="top">Description:</th>
 		<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
@@ -214,16 +195,16 @@ function PatientFormCtrl($scope, $http) {
 	<tr>
 		<th>&nbsp;</th>
 		<td valign="top">
-			<input type="button" value="" class="form-submit" ng-click="postFormData(patientForm);" />
-			<input type="reset" value="" class="form-reset"  />
+			<input type="button" value="Save" class="form-submit" ng-click="postFormData(patientForm);" />
+			<!-- input type="button" value="" class="form-reset"  /-->
 		</td>
 		<td></td>
 	</tr>
 	</table>
 	</form>
-	<!-- end id-form  -->
-	
-	
+
+
+
 	</td>
 	<td>
 

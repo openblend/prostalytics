@@ -9,31 +9,24 @@
 	<meta name="keywords" content="jfacebook" />
 	<meta name="robots" content="noindex, nofollow" />
 	<meta name="revisit-after" content="30 days" />
-	<link type="text/css" rel="stylesheet" media="screen,projection" href="#{ctxRoot}css/screen.css" title="default" />
 	<!--[if IE]>
 	<link rel="stylesheet" media="all" type="text/css" href="#{ctxRoot}css/pro_dropline_ie.css" />
 	<![endif]-->
 	
-	<!--  jquery core -->
-	<!-- script src="#{ctxRoot}js/jquery/jquery-1.4.1.min.js" type="text/javascript"></script-->
-	<script src="http://code.jquery.com/jquery-1.4.1.min.js" type="text/javascript"></script>
- 
-	<!--  checkbox styling script -->
-	<script src="#{ctxRoot}js/jquery/ui.core.js" type="text/javascript"></script>
+    <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="http://angular-ui.github.com/angular-ui/build/angular-ui.css" />
+
+    <script type='text/javascript' src="http://code.angularjs.org/1.0.3/angular.min.js"></script>
+    <script type='text/javascript' src="http://angular-ui.github.com/angular-ui/build/angular-ui.js"></script>
+
 	<script src="#{ctxRoot}js/jquery/ui.checkbox.js" type="text/javascript"></script>
 	<script src="#{ctxRoot}js/jquery/jquery.bind.js" type="text/javascript"></script>
 	<script src="#{ctxRoot}js/openblend.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-$(function(){
-	$('input').checkBox();
-	$('#toggle-all').click(function(){
- 	$('#toggle-all').toggleClass('toggle-checked');
-	$('#mainform input[type=checkbox]').checkBox('toggle');
-	return false;
-	});
-});
-</script>  
+	<link type="text/css" rel="stylesheet" media="screen,projection" href="#{ctxRoot}css/screen.css" title="default" />
 
 
 <!--[if IE 7]><!-->
@@ -68,7 +61,7 @@ $(document).ready(function() {
 </script>
 
 <!--  styled file upload script --> 
-<script src="#{ctxRoot}js/jquery/jquery.filestyle.js" type="text/javascript"></script>
+<!-- script src="#{ctxRoot}js/jquery/jquery.filestyle.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
 	$("input.file_1").filestyle({ 
@@ -79,12 +72,13 @@ $(function() {
 	});
 });
 </script>
+-->
 
 <!-- Custom jquery scripts -->
 <script src="#{ctxRoot}js/jquery/custom_jquery.js" type="text/javascript"></script>
  
 <!-- Tooltips -->
-<script src="#{ctxRoot}js/jquery/jquery.tooltip.js" type="text/javascript"></script>
+<!-- <script src="#{ctxRoot}js/jquery/jquery.tooltip.js" type="text/javascript"></script>
 <script src="#{ctxRoot}js/jquery/jquery.dimensions.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
@@ -99,95 +93,37 @@ $(function() {
 	});
 });
 </script> 
+ -->
 
-<!--  date picker script -->
-<link rel="stylesheet" href="#{ctxRoot}css/datePicker.css" type="text/css" />
-<script src="#{ctxRoot}js/jquery/date.js" type="text/javascript"></script>
-<script src="#{ctxRoot}js/jquery/jquery.datePicker.js" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-        $(function()
-{
-
-// initialise the "Select date" link
-$('#date-pick')
-	.datePicker(
-		// associate the link with a date picker
-		{
-			createButton:false,
-			startDate:'01/01/2005',
-			endDate:'31/12/2020'
-		}
-	).bind(
-		// when the link is clicked display the date picker
-		'click',
-		function()
-		{
-			updateSelects($(this).dpGetSelected()[0]);
-			$(this).dpDisplay();
-			return false;
-		}
-	).bind(
-		// when a date is selected update the SELECTs
-		'dateSelected',
-		function(e, selectedDate, $td, state)
-		{
-			updateSelects(selectedDate);
-		}
-	).bind(
-		'dpClosed',
-		function(e, selected)
-		{
-			updateSelects(selected[0]);
-		}
-	);
 	
-var updateSelects = function (selectedDate)
-{
-	var selectedDate = new Date(selectedDate);
-	$('#d option[value=' + selectedDate.getDate() + ']').attr('selected', 'selected');
-	$('#m option[value=' + (selectedDate.getMonth()+1) + ']').attr('selected', 'selected');
-	$('#y option[value=' + (selectedDate.getFullYear()) + ']').attr('selected', 'selected');
-}
-// listen for when the selects are changed and update the picker
-$('#d, #m, #y')
-	.bind(
-		'change',
-		function()
-		{
-			var d = new Date(
-						$('#y').val(),
-						$('#m').val()-1,
-						$('#d').val()
-					);
-			$('#date-pick').dpSetSelected(d.asString());
-		}
-	);
-
-// default the position of the selects to today
-var today = new Date();
-updateSelects(today.getTime());
-
-// and update the datePicker to reflect it...
-$('#d').trigger('change');
-});
-</script>
-
-<!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
-<script src="#{ctxRoot}js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-$(document).pngFix( );
-});
-</script>
-	
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" type="text/javascript"></script>
 
 	
 <script type="text/javascript">
 
 angular.element(document).ready(function() {
-	angular.bootstrap(document);
+	angular.bootstrap(document, ['ui.directives']);
 });
+
+/* angular.module('demoApp', ['ui'], function($locationProvider) {
+	$locationProvider.hashPrefix('');
+}).value('ui.config', {
+	currency: {
+		symbol: 'EUR €'
+	}
+
+}).directive('scrollto', [function(){
+	return function(scope, elm, attrs) {
+		elm.bind('click', function(e){
+			e.preventDefault();
+			if (attrs.href) {
+				attrs.scrollto = attrs.href;
+			}
+			var top = $(attrs.scrollto).offset().top;
+			$('body').animate({ scrollTop: top }, 800);
+		});
+	};
+}]);
+ */
 
 $(document).ready(function(){
 	selectMenu();
@@ -207,6 +143,14 @@ function selectMenu() {
 	
 	<!-- link rel="icon" type="image/x-icon" href="/favicon.ico" /-->
 	<ui:insert name="head"/>
+
+<!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
+<script src="#{ctxRoot}js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$(document).pngFix( );
+});
+</script>
 </head>
 <body>
 

@@ -39,9 +39,31 @@ function PatientFormCtrl($scope, $http) {
     };
 
     $scope.activeTab = 'personal';
-    $scope.switchTab = function(tabName) {
-    	$scope.activeTab = tabName;
+    $scope.switchTab = function(tabName, valid) {
+
+    	console.log($scope.personalForm)
+    	console.log($scope.personalForm.patient_surname)
+    	//$scope.personalForm.patient_surname.$error.required=true;
+    	$scope.personalForm.patient_surname.required=true;
+    	
+
+    	
+    	if(valid) { 
+    		$scope.activeTab = tabName;
+		} else {
+			alert("invalid form");
+		}
     }
+
+    //angular.element(PatientFormCtrl).scope()
+    //angular.element(personalForm).scope().personal_form.patient_surname.$error.required=true;
+	
+	
+	//$scope.personalForm.patient_surname.$error.required=true;
+	
+	
+	window.scope = $scope;
+    
 }
 //]]>
 </script>
@@ -66,15 +88,15 @@ function PatientFormCtrl($scope, $http) {
 		<div id="step-holder">
 			<div class="step-no">1</div>
 			<div class="step-dark-left"
-					ng-click="switchTab('personal');">
+					ng-click="switchTab('personal', rrpForm.$valid);">
 				Personal data</div>
 			<div class="step-dark-right">&nbsp;</div>
 			
-			<div ng-class="{true:'step-no', false:'step-no-off'}[patientForm.$valid]">2</div>
-			<div ng-class="{true:'step-dark-left', false:'step-light-left'}[patientForm.$valid]" ng-click="switchTab('rrp');">
+			<div ng-class="{true:'step-no', false:'step-no-off'}[personalForm.$valid]">2</div>
+			<div ng-class="{true:'step-dark-left', false:'step-light-left'}[personalForm.$valid]" ng-click="switchTab('rrp', personalForm.$valid);">
 				Osnovni rrp
 			</div>
-			<div ng-class="{true:'step-dark-right', false:'step-light-right'}[patientForm.$valid]">&nbsp;</div>
+			<div ng-class="{true:'step-dark-right', false:'step-light-right'}[personalForm.$valid]">&nbsp;</div>
 			
 			<div class="step-no-off">3</div>
 			<div class="step-light-left">Preview</div>
@@ -82,15 +104,18 @@ function PatientFormCtrl($scope, $http) {
 			<div class="clear"></div>
 		</div>
 		<!--  end step-holder -->
+		
+		
 	
-		<form name="patientForm" novalidate="true" ng-show="activeTab == 'personal'">
+		<form name="personalForm" novalidate="true" ng-show="activeTab == 'personal'">
 		<!-- start id-form -->
 		<table border="0" cellpadding="0" cellspacing="0"  class="formTable">
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
-			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td>
+			<!--td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td-->
+			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" /></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_surname)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -100,7 +125,7 @@ function PatientFormCtrl($scope, $http) {
 			<th valign="top">Name:</th>
 			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_name)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_name)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -110,7 +135,7 @@ function PatientFormCtrl($scope, $http) {
 			<th valign="top">Bitrh date:</th>
 			<td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(patientForm, patientForm.date_birth)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.date_birth)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -120,7 +145,7 @@ function PatientFormCtrl($scope, $http) {
 			<th valign="top">External ID:</th>
 			<td><input type="text" name="patient_ext_id" class="inp-form" ng-model="patient.extId" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_ext_id)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_ext_id)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -129,7 +154,7 @@ function PatientFormCtrl($scope, $http) {
 		<tr>
 			<th>&nbsp;</th>
 			<td valign="top">
-				<input type="button" value="Save" class="form-submit" ng-click="postFormData(patientForm);" />
+				<input type="button" value="Save" class="form-submit" ng-click="postFormData(personalForm);" />
 				<!-- input type="button" value="" class="form-reset"  /-->
 			</td>
 			<td></td>
@@ -146,60 +171,63 @@ function PatientFormCtrl($scope, $http) {
 		<!-- start id-form -->
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
-			<th valign="top" id="name_desc">Surname:</th>
-			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td>
+			<th valign="top">Trus date:</th>
+			<td><input ng-model="trusDate" name="trus_date" ui-date="dateOptions" class="inp-form" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(patientForm, patientForm.patient_surname)">
+			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_date)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
 			</td>
 		</tr>
-
+		
 		<tr>
-		<th valign="top">Category:</th>
-		<td>	
-		<select  class="styledselect_form_1">
-			<option value="">All</option>
-			<option value="">Products</option>
-			<option value="">Categories</option>
-			<option value="">Clients</option>
-			<option value="">News</option>
-		</select>
-		</td>
-		<td></td>
+			<th valign="top">Trus psa as bx:</th>
+			<td><input type="number" ng-model="trusPsaBx" name="trus_psa_bx" class="inp-form" required="true" /></td>
+			<td>
+			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_psa_bx)">
+				<div class="error-left"></div>
+				<div class="error-inner">Number required.</div>
+			</div>
+			</td>
 		</tr>
+		
 		<tr>
-		<th valign="top">Sub Category:</th>
-		<td>	
-		<select  class="styledselect_form_1">
-			<option value="">All</option>
-			<option value="">Products</option>
-			<option value="">Categories</option>
-			<option value="">Clients</option>
-			<option value="">News</option>
-		</select>
-		</td>
-		<td></td>
-		</tr> 
-		<tr>
-			<th valign="top">Price:</th>
-			<td><input type="text" class="inp-form" /></td>
+			<th valign="top">Trus DRE:</th>
+			<td>	
+				<select class="styledselect_form_1">
+					<option value="">no</option>
+					<option value="">positive</option>
+					<option value="">negative</option>
+				</select>
+			</td>
 			<td></td>
 		</tr>
-	<tr>
-		<th valign="top">Description:</th>
-		<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
-		<td></td>
-	</tr>
-	<tr>
-		<th>&nbsp;</th>
-		<td valign="top">
-			<input type="button" value="Save" class="form-submit" ng-click="postFormData(patientForm);" />
-			<!-- input type="button" value="" class="form-reset"  /-->
-		</td>
-		<td></td>
-	</tr>
+		
+
+
+		<tr>
+			<th valign="top">true or false:</th>
+			<td>	
+				<div class="radioLine"><input type="radio" value="true" ng-model="trueFalse" /><span class="radioLabel">True</span></div>
+				<div class="radioLine"><input type="radio" value="false" ng-model="trueFalse" /><span class="radioLabel">False</span></div>
+			</td>
+			<td></td>
+		</tr>
+
+		<tr>
+			<th valign="top">Description:</th>
+			<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td valign="top">
+				<input type="button" value="Save" class="form-submit" ng-click="postFormData(personalForm);" />
+				<!-- input type="button" value="" class="form-reset"  /-->
+			</td>
+			<td></td>
+		</tr>
 	</table>
 	</form>
 

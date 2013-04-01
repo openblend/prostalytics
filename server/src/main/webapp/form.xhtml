@@ -34,10 +34,10 @@ function PatientFormCtrl($scope, $http) {
  		return (!field.$valid && (field.$dirty || form.submitted))
     };
 
-    $scope.dateOptions = {
+/*     $scope.dateOptions = {
     	dateFormat: "yy-mm-dd"
     };
-
+ */
     $scope.activeTab = 'personal';
     $scope.switchTab = function(tabName, valid) {
 
@@ -133,9 +133,10 @@ function PatientFormCtrl($scope, $http) {
 		</tr>
 		<tr>
 			<th valign="top">Bitrh date:</th>
-			<td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td>
+			<!--td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td-->
+			<td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.date_birth)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_birthDate)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -143,9 +144,9 @@ function PatientFormCtrl($scope, $http) {
 		</tr>
 		<tr>
 			<th valign="top">External ID:</th>
-			<td><input type="text" name="patient_ext_id" class="inp-form" ng-model="patient.extId" required="true"/></td>
+			<td><input type="text" name="patient_externalId" class="inp-form" ng-model="patient.externalId" required="true"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_ext_id)">
+			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_externalId)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
 			</div>
@@ -172,7 +173,7 @@ function PatientFormCtrl($scope, $http) {
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<th valign="top">Trus date:</th>
-			<td><input ng-model="trusDate" name="trus_date" ui-date="dateOptions" class="inp-form" required="true"/></td>
+			<td><input ng-model="trusDate" name="trus_date" class="inp-form" required="true"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_date)">
 				<div class="error-left"></div>

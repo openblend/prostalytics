@@ -1,0 +1,26 @@
+{
+    "id": {
+    	"type" : "String",
+    	"readOnly" : "true"
+    	},
+    "code": {
+    	"type" : "String",
+    	"readOnly" : "true"
+    	},
+    "surname": {
+    	"type" : "String",
+    	"required" : "nonEmpty"
+    	},
+    "name": {
+    	"type" : "String",
+    	"required" : "nonEmpty"
+    	},
+    "birthDate": {
+    	"type" : "date",
+    	"required" : "nonEmpty"
+    	},
+	"externalId": {
+    	"type" : "String"
+    	}
+}
+    

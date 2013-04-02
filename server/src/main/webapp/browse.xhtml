@@ -13,15 +13,16 @@
     <ui:define name="content">
     	<script>
         function PatientListCtrl($scope, $http) {
-
-            $http.get('#{ctxRoot}rest-mock/patients.json').success(function(data) {
-            	  $scope.patients = data;
-            });
-            
+			$http({
+			    method: 'GET',
+			    url: '#{ctxRoot}rest/patient/find',
+			    headers: {'Accept': 'application/json'}
+			}).success(function(data) {
+               $scope.patients = data;
+			});
             $scope.openForm = function(id){
                 window.location='#{ctxRoot}form.jsf?id=' + id;
             }
-
         }
 
     	</script>

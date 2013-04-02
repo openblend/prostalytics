@@ -94,9 +94,17 @@ function PatientFormCtrl($scope, $http) {
 	var id = getURLParameter('id');
 
 	if (id != null) {
-	    $http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
+	    /*$http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
 	    	  $scope.patient = data;
-	    });
+	    });*/
+        $.ajax({
+            //async: false,
+            dataType: "json",
+            url: '#{ctxRoot}rest/patient/' + id,
+            success: (function(data) {
+                $scope.patient = data;
+            })
+        });
 	}
 	
     $scope.postFormData = function(form) {

@@ -35,8 +35,12 @@ function bvRulesValidate(elem, attr, value) {
 
 	if (object != undefined && field != undefined ) {
 		var fieldDef = window.formsDef[object][field];
-		if (fieldDef.required != undefined && fieldDef.required == 'nonEmpty') {
-			valid = (value != undefined && value != "")
+		if (fieldDef.required != undefined) {
+			if (fieldDef.required == 'nonEmpty') {
+				valid = (value != undefined && value != "");
+			} else if (fieldDef.required == 'date') {
+				valid = datePatt.test(value);
+			}
 		}
 	}
 	return valid;	

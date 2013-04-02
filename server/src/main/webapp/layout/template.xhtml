@@ -34,6 +34,11 @@
 <!--  styled select box script version 1 -->
 <script src="#{ctxRoot}js/jquery/jquery.selectbox-0.5.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+var datePatt=new RegExp(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+
+
+
 $(document).ready(function() {
 	$('.styledselect').selectbox({ inputClass: "selectbox_styled" });
 });

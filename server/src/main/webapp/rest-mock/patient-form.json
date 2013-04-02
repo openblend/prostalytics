@@ -17,7 +17,7 @@
     	},
     "birthDate": {
     	"type" : "date",
-    	"required" : "nonEmpty"
+    	"required" : "date"
     	},
 	"externalId": {
     	"type" : "String",

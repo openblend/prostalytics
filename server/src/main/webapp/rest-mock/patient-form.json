@@ -20,7 +20,8 @@
     	"required" : "nonEmpty"
     	},
 	"externalId": {
-    	"type" : "String"
+    	"type" : "String",
+    	"required" : "nonEmpty"
     	}
 }
     

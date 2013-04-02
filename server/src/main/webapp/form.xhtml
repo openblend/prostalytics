@@ -14,6 +14,17 @@
 //<![CDATA[
 
 var formsDef = {};
+
+//blocking request to read form metadata
+$.ajax({
+	async: false,
+	dataType: "json",
+   	url: '#{ctxRoot}rest-mock/patient-form.json',
+   	success: (function(data) {
+	      	  window.formsDef["patient"] = data;
+   			  })
+});
+
            
 function bvRulesValidate(elem, attr, value) {
 	valid = true;
@@ -22,12 +33,12 @@ function bvRulesValidate(elem, attr, value) {
 	var object = ngSplit[0];
 	var field = ngSplit[1];
 
-	var field = window.formsDef[object][field];
-	if (field.required != undefined && field.required == 'nonEmpty') {
-		valid = (value != "")
+	if (object != undefined && field != undefined ) {
+		var fieldDef = window.formsDef[object][field];
+		if (fieldDef.required != undefined && fieldDef.required == 'nonEmpty') {
+			valid = (value != undefined && value != "")
+		}
 	}
-	
-	console.log("valid:" + valid);
 	return valid;	
 }
 
@@ -64,7 +75,8 @@ app.directive('bvRules', function() {
             // is updated on the DOM element.
             ctrl.$formatters.unshift(function(value) {
                 // validate.
-                ctrl.$setValidity('bvRules', bvRulesValidate(elem, attr, value));
+                var valid = bvRulesValidate(elem, attr, value);
+                ctrl.$setValidity('bvRules', valid);
                 // return the value or nothing will be written to the DOM.
                 return value;
             });
@@ -75,9 +87,6 @@ app.directive('bvRules', function() {
 
 function PatientFormCtrl($scope, $http) {
 
-   console.log("getting def ... ");
-
-	
 	var id = getURLParameter('id');
 
 	if (id != null) {
@@ -85,16 +94,7 @@ function PatientFormCtrl($scope, $http) {
 	    	  $scope.patient = data;
 	    });
 	}
-
-    $.ajax({
-        async: false,
-    	dataType: "json",
-    	url: '#{ctxRoot}rest-mock/patient-form.json',
-    	success: (function(data) {
-		      	  window.formsDef["patient"] = data;
-      			})
-    	});
-    
+	
     $scope.postFormData = function(form) {
     	form.submitted = true;
     	if (form.$valid) {
@@ -105,7 +105,8 @@ function PatientFormCtrl($scope, $http) {
 	};
 
 	$scope.validateField = function(form, field) {
- 		return (!field.$valid && (field.$dirty || form.submitted))
+ 		//return (!field.$valid && (field.$dirty || form.submitted))
+ 		return (!field.$valid )
     };
 
 	/* $scope.dateOptions = {
@@ -114,16 +115,12 @@ function PatientFormCtrl($scope, $http) {
 
     $scope.activeTab = 'personal';
     $scope.switchTab = function(tabName, valid) {
-
-    	console.log($scope.personalForm)
-    	
     	if(valid) { 
     		$scope.activeTab = tabName;
 		} else {
 			alert("invalid form");
 		}
     }
-
 	window.scope = $scope;
 }
 //]]>
@@ -141,7 +138,7 @@ function PatientFormCtrl($scope, $http) {
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
 	
-	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="myApp">
 	<tr valign="top">
 	<td>
 	
@@ -168,7 +165,7 @@ function PatientFormCtrl($scope, $http) {
 		
 		
 	
-		<form name="personalForm" novalidate="true" ng-show="activeTab == 'personal'">
+		<form name="personalForm" ng-show="activeTab == 'personal'">
 		<!-- start id-form -->
 		<table border="0" cellpadding="0" cellspacing="0"  class="formTable">
 		<tr>
@@ -176,15 +173,15 @@ function PatientFormCtrl($scope, $http) {
 			<!--td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td-->
 			<td><input id="patient_surname" name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" bv-rules="bv-rules"/></td>
 			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
+			<!-- div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
 				<div class="error-left"></div>
 				<div class="error-inner">This field is required.</div>
-			</div>
+			</div-->
 			</td>
 		</tr>
 		<tr>
 			<th valign="top">Name:</th>
-			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" bv-rules="bv-rules"/></td>
+			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" bv-rules="bv-rules" /></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_name)">
 				<div class="error-left"></div>
@@ -229,12 +226,12 @@ function PatientFormCtrl($scope, $http) {
 	
 	<!-- second tab -->
 
-		<form name="rrpForm" novalidate="true" class="formTable" ng-show="activeTab == 'rrp'">
+		<form name="rrpForm" novalidate="false" class="formTable" ng-show="activeTab == 'rrp'">
 		<!-- start id-form -->
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<th valign="top">Trus date:</th>
-			<td><input ng-model="trusDate" name="trus_date" class="inp-form" required="true"/></td>
+			<td><input ng-model="trusDate" name="trus_date" class="inp-form" bv-rules="bv-rules"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_date)">
 				<div class="error-left"></div>
@@ -245,7 +242,7 @@ function PatientFormCtrl($scope, $http) {
 		
 		<tr>
 			<th valign="top">Trus psa as bx:</th>
-			<td><input type="number" ng-model="trusPsaBx" name="trus_psa_bx" class="inp-form" required="true" /></td>
+			<td><input type="number" ng-model="trusPsaBx" name="trus_psa_bx" class="inp-form" bv-rules="bv-rules" /></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_psa_bx)">
 				<div class="error-left"></div>

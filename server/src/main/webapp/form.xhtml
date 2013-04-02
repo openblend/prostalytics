@@ -11,20 +11,22 @@
     <ui:define name="head">
 
 <script>
+//<![CDATA[
 
+var formsDef = {};
+           
 function bvRulesValidate(elem, attr, value) {
-	console.log(elem);
-	console.log(attr);
-	console.log(attr.ngModel);
-	console.log(value);
+	valid = true;
 
-	valid = false;
-	if (attr.ngModel == 'patient.surname') {
-		valid = (value == 'lazar');
-	} else if (attr.ngModel == 'patient.name') {
-		valid = (value == 'matej');
+	var ngSplit = attr.ngModel.split(".");
+	var object = ngSplit[0];
+	var field = ngSplit[1];
+
+	var field = window.formsDef[object][field];
+	if (field.required != undefined && field.required == 'nonEmpty') {
+		valid = (value != "")
 	}
-
+	
 	console.log("valid:" + valid);
 	return valid;	
 }
@@ -45,7 +47,7 @@ app.directive('bvRules', function() {
         // attr = a dictionary of attributes on the element
         // ctrl = the controller for ngModel.
         link: function(scope, elem, attr, ctrl) {
-                        
+
             // add a parser that will process each time the value is 
             // parsed into the model when the user updates it.
             ctrl.$parsers.unshift(function(value) {
@@ -70,15 +72,29 @@ app.directive('bvRules', function() {
     };
 });
 
-//<![CDATA[
+
 function PatientFormCtrl($scope, $http) {
 
-	var id = getURLParameter('id');
-	
-    $http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
-    	  $scope.patient = data;
-    });
+   console.log("getting def ... ");
 
+	
+	var id = getURLParameter('id');
+
+	if (id != null) {
+	    $http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
+	    	  $scope.patient = data;
+	    });
+	}
+
+    $.ajax({
+        async: false,
+    	dataType: "json",
+    	url: '#{ctxRoot}rest-mock/patient-form.json',
+    	success: (function(data) {
+		      	  window.formsDef["patient"] = data;
+      			})
+    	});
+    
     $scope.postFormData = function(form) {
     	form.submitted = true;
     	if (form.$valid) {
@@ -100,9 +116,6 @@ function PatientFormCtrl($scope, $http) {
     $scope.switchTab = function(tabName, valid) {
 
     	console.log($scope.personalForm)
-    	console.log($scope.personalForm.patient_surname)
-    	//$scope.personalForm.patient_surname.$error.required=true;
-    	//$scope.personalForm.patient_surname.required=true;
     	
     	if(valid) { 
     		$scope.activeTab = tabName;
@@ -110,9 +123,8 @@ function PatientFormCtrl($scope, $http) {
 			alert("invalid form");
 		}
     }
-	
+
 	window.scope = $scope;
-    
 }
 //]]>
 </script>
@@ -183,7 +195,7 @@ function PatientFormCtrl($scope, $http) {
 		<tr>
 			<th valign="top">Bitrh date:</th>
 			<!--td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td-->
-			<td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" required="true"/></td>
+			<td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" bv-rules="bv-rules"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_birthDate)">
 				<div class="error-left"></div>
@@ -193,7 +205,7 @@ function PatientFormCtrl($scope, $http) {
 		</tr>
 		<tr>
 			<th valign="top">External ID:</th>
-			<td><input type="text" name="patient_externalId" class="inp-form" ng-model="patient.externalId" required="true"/></td>
+			<td><input type="text" name="patient_externalId" class="inp-form" ng-model="patient.externalId" bv-rules="bv-rules"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_externalId)">
 				<div class="error-left"></div>

@@ -11,6 +11,65 @@
     <ui:define name="head">
 
 <script>
+
+function bvRulesValidate(elem, attr, value) {
+	console.log(elem);
+	console.log(attr);
+	console.log(attr.ngModel);
+	console.log(value);
+
+	valid = false;
+	if (attr.ngModel == 'patient.surname') {
+		valid = (value == 'lazar');
+	} else if (attr.ngModel == 'patient.name') {
+		valid = (value == 'matej');
+	}
+
+	console.log("valid:" + valid);
+	return valid;	
+}
+
+
+var app = angular.module('myApp', []);
+/* http://www.benlesh.com/2012/12/angular-js-custom-validation-via.html */
+app.directive('bvRules', function() {
+    return {
+        // restrict to an attribute type.
+        restrict: 'A',
+        
+        // element must have ng-model attribute.
+        require: 'ngModel',
+        
+        // scope = the parent scope
+        // elem = the element the directive is on
+        // attr = a dictionary of attributes on the element
+        // ctrl = the controller for ngModel.
+        link: function(scope, elem, attr, ctrl) {
+                        
+            // add a parser that will process each time the value is 
+            // parsed into the model when the user updates it.
+            ctrl.$parsers.unshift(function(value) {
+                // test and set the validity after update.
+                var valid = bvRulesValidate(elem, attr, value);
+                ctrl.$setValidity('bvRules', valid);
+                
+                // if it's valid, return the value to the model, 
+                // otherwise return undefined.
+                return valid ? value : undefined;
+            });
+            
+            // add a formatter that will process each time the value 
+            // is updated on the DOM element.
+            ctrl.$formatters.unshift(function(value) {
+                // validate.
+                ctrl.$setValidity('bvRules', bvRulesValidate(elem, attr, value));
+                // return the value or nothing will be written to the DOM.
+                return value;
+            });
+        }
+    };
+});
+
 //<![CDATA[
 function PatientFormCtrl($scope, $http) {
 
@@ -27,26 +86,23 @@ function PatientFormCtrl($scope, $http) {
 		} else {
 			alert("incomplete");
 		}
-		
 	};
 
 	$scope.validateField = function(form, field) {
  		return (!field.$valid && (field.$dirty || form.submitted))
     };
 
-/*     $scope.dateOptions = {
+	/* $scope.dateOptions = {
     	dateFormat: "yy-mm-dd"
-    };
- */
+    };*/
+
     $scope.activeTab = 'personal';
     $scope.switchTab = function(tabName, valid) {
 
     	console.log($scope.personalForm)
     	console.log($scope.personalForm.patient_surname)
     	//$scope.personalForm.patient_surname.$error.required=true;
-    	$scope.personalForm.patient_surname.required=true;
-    	
-
+    	//$scope.personalForm.patient_surname.required=true;
     	
     	if(valid) { 
     		$scope.activeTab = tabName;
@@ -54,13 +110,6 @@ function PatientFormCtrl($scope, $http) {
 			alert("invalid form");
 		}
     }
-
-    //angular.element(PatientFormCtrl).scope()
-    //angular.element(personalForm).scope().personal_form.patient_surname.$error.required=true;
-	
-	
-	//$scope.personalForm.patient_surname.$error.required=true;
-	
 	
 	window.scope = $scope;
     
@@ -113,7 +162,7 @@ function PatientFormCtrl($scope, $http) {
 		<tr>
 			<th valign="top" id="name_desc">Surname:</th>
 			<!--td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td-->
-			<td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" /></td>
+			<td><input id="patient_surname" name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" bv-rules="bv-rules"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
 				<div class="error-left"></div>
@@ -123,7 +172,7 @@ function PatientFormCtrl($scope, $http) {
 		</tr>
 		<tr>
 			<th valign="top">Name:</th>
-			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" required="true"/></td>
+			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" bv-rules="bv-rules"/></td>
 			<td>
 			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_name)">
 				<div class="error-left"></div>

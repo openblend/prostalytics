@@ -105,27 +105,6 @@ angular.element(document).ready(function() {
 	angular.bootstrap(document);
 });
 
-/* angular.module('demoApp', ['ui'], function($locationProvider) {
-	$locationProvider.hashPrefix('');
-}).value('ui.config', {
-	currency: {
-		symbol: 'EUR €'
-	}
-
-}).directive('scrollto', [function(){
-	return function(scope, elm, attrs) {
-		elm.bind('click', function(e){
-			e.preventDefault();
-			if (attrs.href) {
-				attrs.scrollto = attrs.href;
-			}
-			var top = $(attrs.scrollto).offset().top;
-			$('body').animate({ scrollTop: top }, 800);
-		});
-	};
-}]);
- */
-
 $(document).ready(function(){
 	selectMenu();
 });
@@ -136,7 +115,6 @@ function selectMenu() {
 		$("#" + selectedMenuId).attr("class","current");
 	}	
 }
-
 
 </script>
 	
@@ -284,7 +262,7 @@ $(document).pngFix( );
 
 <div id="page-heading"><h1><ui:insert name="title"/></h1></div>
 
-<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table" ng-app="myApp">
 <tr>
 	<th rowspan="3" class="sized"><img src="#{ctxRoot}images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
 	<th class="topleft"></th>

@@ -12,17 +12,18 @@
         <param-value>${project.basedir}/src/main/webapp</param-value>
     </context-param>
 
-    <servlet>
+    <!--servlet>
         <servlet-name>Resteasy</servlet-name>
         <servlet-class>
             org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
         </servlet-class>
-        <!-- init-param>
+        .. init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>com.restfully.shop.services.ShoppingApplication</param-value>
-        </init-param-->
-    </servlet>
+        </init-param..
+    </servlet-->
 
+    <!--
     <servlet-mapping>
         <servlet-name>Resteasy</servlet-name>
         <url-pattern>/rest/*</url-pattern>
@@ -36,7 +37,8 @@
     	<param-name>resteasy.scan</param-name>
      	<param-value>true</param-value>
     </context-param>
-    
+    -->
+
     <security-constraint>
     <display-name>Restrict raw XHTML Documents</display-name>
       <web-resource-collection>

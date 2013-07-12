@@ -1,7 +1,7 @@
 package org.openblend.prostalytics.auth;
 
-import org.openblend.prostalytics.dao.AuthDAO;
-import org.openblend.prostalytics.domain.Patient;
+import org.openblend.prostalytics.auth.dao.AuthDAO;
+import org.openblend.prostalytics.auth.domain.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,24 +13,24 @@ import java.util.UUID;
 @ApplicationScoped
 public class TokenManager {
 
-    private static final ThreadLocal<Patient> tlu = new ThreadLocal<Patient>();
+    private static final ThreadLocal<User> tlu = new ThreadLocal<User>();
 
     @Inject
     private AuthDAO dao;
 
-    public Patient associate(String token) {
-        Patient p = dao.findUserByToken(token);
-        if (p != null) {
-            tlu.set(p);
+    public User associate(String token) {
+        User u = dao.findUserByToken(token);
+        if (u != null) {
+            tlu.set(u);
         }
-        return p;
+        return u;
     }
 
     public void dissociate() {
         tlu.remove();
     }
 
-    public static Patient getPatient() {
+    public static User getUser() {
         return tlu.get();
     }
 

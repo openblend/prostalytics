@@ -34,7 +34,7 @@ public class AuthInterceptor implements ContainerRequestFilter, ContainerRespons
             tokenMgr.associate(token);
         }
 
-        if (TokenManager.getPatient() == null && isAuthRequired()) {
+        if (TokenManager.getUser() == null && isAuthRequired()) {
             context.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }

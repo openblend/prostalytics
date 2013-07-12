@@ -39,6 +39,7 @@ public class AuthService {
     @Inject
     private UserDAO userDao;
 
+    @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
@@ -66,6 +67,7 @@ public class AuthService {
     }
 
 
+    @Path("/login")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)

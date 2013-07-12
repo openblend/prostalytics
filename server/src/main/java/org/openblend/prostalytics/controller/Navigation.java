@@ -15,7 +15,7 @@ public class Navigation {
         if (OK.equals(status)) {
             return "home.xthml";
         } else if (ERROR.equals(status)) {
-            return "register.xhtml";
+            return "register.html";
         }
         throw new IllegalArgumentException("status = " + status);
     }
@@ -28,7 +28,7 @@ public class Navigation {
         if (OK.equals(status)) {
             return "home.xthml";
         } else if (ERROR.equals(status)) {
-            return "login.xhtml";
+            return "login.html";
         }
         throw new IllegalArgumentException("status = " + status);
     }

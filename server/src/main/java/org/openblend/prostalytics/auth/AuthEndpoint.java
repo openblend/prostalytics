@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,7 +26,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("/auth")
 @ApplicationScoped
-public class AuthService {
+public class AuthEndpoint {
 
     @Context
     private UriInfo uriInfo;
@@ -38,6 +39,9 @@ public class AuthService {
 
     @Inject
     private UserDAO userDao;
+
+    @Inject
+    private AuthManager auth;
 
     @Path("/register")
     @POST
@@ -72,13 +76,22 @@ public class AuthService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
     public Response login(@FormParam("username") String username,
-                          @FormParam("password") String password) throws URISyntaxException {
+                          @FormParam("password") String password, @HeaderParam("Auth-Token") String token) throws URISyntaxException {
 
+        String newToken = null;
         try {
             User user = dao.authenticate(username, hashPassword(password));
+            if (user != null) {
+                newToken = auth.loggedIn(user, token);
+            }
 
-            URI uri = UriBuilder.fromUri(uriInfo.getBaseUri().resolve(Navigation.fromLogin(user != null ? Navigation.OK : Navigation.ERROR))).build();
-            return Response.seeOther(uri).build();
+            URI redir = uriInfo.getBaseUri().resolve(Navigation.fromLogin(user != null ? Navigation.OK: Navigation.ERROR));
+            URI uri = UriBuilder.fromUri(redir).build();
+            Response.ResponseBuilder res = Response.seeOther(uri);
+            if (newToken != null) {
+                res.header("Auth-Token", newToken);
+            }
+            return res.build();
         } catch (Throwable e) {
             URI uri = UriBuilder.fromUri(uriInfo.getBaseUri().resolve(Navigation.fromLogin(Navigation.ERROR, e))).build();
             return Response.seeOther(uri).build();

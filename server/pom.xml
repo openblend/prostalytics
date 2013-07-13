@@ -13,6 +13,10 @@
     <name>Prostalytics App Server Side</name>
     <description>Prostalytics App Server Side</description>
 
+    <properties>
+        <version.deltaspike>0.4</version.deltaspike>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -75,7 +79,19 @@
 			<artifactId>resteasy-jackson-provider</artifactId>
             <scope>provided</scope>
 		</dependency>
-        
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+            <version>${version.deltaspike}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <version>${version.deltaspike}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
 </project>

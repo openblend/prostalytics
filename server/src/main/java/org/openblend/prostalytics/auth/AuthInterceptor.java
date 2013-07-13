@@ -10,20 +10,30 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.HashSet;
 
 @Provider
 public class AuthInterceptor implements ContainerRequestFilter, ContainerResponseFilter {
 
     @Inject
-    TokenManager tokenMgr;
+    private AuthManager authManager;
 
     @Context
     private UriInfo uriInfo;
 
+    private static HashSet<String> openResources = new HashSet<String>();
+
+    static {
+        openResources.add("/auth/register");
+        openResources.add("/auth/login");
+    }
+
     private boolean isAuthRequired() {
-        if ("/secure/signin/validate".equals(uriInfo.getPath()))
+        if (openResources.contains(uriInfo.getPath())) {
             return false;
-        return "secure".equals(uriInfo.getPathSegments().get(0).getPath());
+        }
+
+        return true;
     }
 
     @Override
@@ -31,16 +41,16 @@ public class AuthInterceptor implements ContainerRequestFilter, ContainerRespons
         String token = context.getHeaders().getFirst("client_token");
 
         if (token != null) {
-            tokenMgr.associate(token);
+            authManager.associate(token);
         }
 
-        if (TokenManager.getUser() == null && isAuthRequired()) {
+        if (authManager.getUser() == null && isAuthRequired()) {
             context.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
-        tokenMgr.dissociate();
+        authManager.dissociate();
     }
 }

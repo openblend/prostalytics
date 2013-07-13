@@ -13,6 +13,7 @@ import org.openblend.prostalytics.auth.domain.User;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
@@ -41,6 +42,12 @@ public class AuthDAOImpl extends AbstractDAOImpl implements AuthDAO {
     }
 
     @Override
+    public Token updateOrCreateToken(User user, String oldToken) {
+        // TODO - Implement method
+        return null;
+    }
+
+    @Override
     public User authenticate(String username, String passwordHash) {
         Query query = new Query(User.KIND);
 
@@ -56,5 +63,13 @@ public class AuthDAOImpl extends AbstractDAOImpl implements AuthDAO {
             return null;
 
         return users.get(0);
+    }
+
+    public long saveToken(final Token token) {
+        return inTx(new Callable<Long>() {
+            public Long call() throws Exception {
+                return ds.put(token.toEntity()).getId();
+            }
+        });
     }
 }

@@ -1,6 +1,9 @@
-package org.openblend.prostalytics.auth;
+package org.openblend.prostalytics.auth.impl;
 
+import org.apache.deltaspike.core.api.exclude.Exclude;
+import org.openblend.prostalytics.auth.AuthManager;
 import org.openblend.prostalytics.auth.dao.AuthDAO;
+import org.openblend.prostalytics.auth.domain.Token;
 import org.openblend.prostalytics.auth.domain.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -10,14 +13,15 @@ import java.util.UUID;
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
-@ApplicationScoped
-public class TokenManager {
+@Exclude
+public class TokenAuthManagerImpl implements AuthManager {
 
     private static final ThreadLocal<User> tlu = new ThreadLocal<User>();
 
     @Inject
     private AuthDAO dao;
 
+    @Override
     public User associate(String token) {
         User u = dao.findUserByToken(token);
         if (u != null) {
@@ -26,12 +30,23 @@ public class TokenManager {
         return u;
     }
 
+    @Override
     public void dissociate() {
         tlu.remove();
     }
 
-    public static User getUser() {
+    @Override
+    public User getUser() {
         return tlu.get();
+    }
+
+    @Override
+    public String loggedIn(User user, String oldToken) {
+        Token token = dao.updateOrCreateToken(user, oldToken);
+        // null out the password - just in case ...
+        user.setPassword(null);
+        tlu.set(user);
+        return token == null ? null : token.getToken();
     }
 
     private String generateToken() {

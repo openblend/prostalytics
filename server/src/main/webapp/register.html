@@ -36,7 +36,7 @@
 
       <!--  start register-inner -->
       <div id="register-inner">
-         <form action="auth/register">
+         <form method="POST" action="rest/auth/register">
             <table border="0" cellpadding="0" cellspacing="0">
                <tr>
                   <td><label for="username">Username</label></td>
@@ -60,7 +60,7 @@
                </tr>
                <tr>
                   <td></td>
-                  <td><input type="button" class="submit-login"  /></td>
+                  <td><input type="submit" value="Register" class="submit-login"  /></td>
                </tr>
             </table>
          </form>

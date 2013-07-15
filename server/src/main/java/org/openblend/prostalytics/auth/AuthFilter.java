@@ -11,33 +11,49 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
-@WebFilter("/*")
+@WebFilter(filterName="AuthFilter")
 public class AuthFilter implements Filter {
 
-    private static HashSet<String> openResources = new HashSet<String>();
+    private static List<Pattern> securedResources = new LinkedList<Pattern>();
+
+    private static List<Pattern> openResources = new LinkedList<Pattern>();
 
     static {
-        openResources.add("/rest/auth/register");
-        openResources.add("/rest/auth/login");
-        openResources.add("/home.xhtml");
-        openResources.add("/register.html");
-        openResources.add("/login.html");
+        securedResources.add(Pattern.compile("/rest/auth/.*"));
+
+        openResources.add(Pattern.compile("/rest/auth/register"));
+        openResources.add(Pattern.compile("/rest/auth/login"));
+        //openResources.add(Pattern.compile("/home.jsf"));
+        //openResources.add(Pattern.compile("/register.html"));
+        //openResources.add(Pattern.compile("/login.html"));
     }
 
     @Inject
     private AuthManager authManager;
 
     private boolean isAuthRequired(HttpServletRequest req) {
-        if (openResources.contains(req.getPathInfo())) {
-            return false;
-        }
 
-        return true;
+        String path = getRequestURI(req);
+        for (Pattern p: openResources) {
+            if (p.matcher(path).matches())
+                return false;
+        }
+        for (Pattern p: securedResources) {
+            if (p.matcher(path).matches())
+                return true;
+        }
+        return false;
+    }
+
+    private String getRequestURI(HttpServletRequest req) {
+        return req.getRequestURI().substring(req.getContextPath().length());
     }
 
     @Override

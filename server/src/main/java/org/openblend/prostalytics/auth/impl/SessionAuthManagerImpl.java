@@ -1,24 +1,20 @@
 package org.openblend.prostalytics.auth.impl;
 
-import org.apache.deltaspike.core.api.exclude.Exclude;
+import org.openblend.prostalytics.framework.ProtectedContext;
 import org.openblend.prostalytics.auth.AuthManager;
 import org.openblend.prostalytics.auth.domain.User;
 
+import javax.enterprise.inject.Alternative;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
-@Exclude
-public class SessionAuthManagerImpl implements AuthManager {
+@Alternative
+public class SessionAuthManagerImpl extends ProtectedContext implements AuthManager {
 
     private static String USER = "_logged_in_user";
-
-    private HttpSession session;
-
-    public SessionAuthManagerImpl(HttpSession session) {
-        this.session = session;
-    }
 
     @Override
     public User associate(String token) {
@@ -32,14 +28,22 @@ public class SessionAuthManagerImpl implements AuthManager {
 
     @Override
     public User getUser() {
-        return (User) session.getAttribute(USER);
+        return (User) getSession().getAttribute(USER);
     }
 
     @Override
     public String loggedIn(User user, String oldToken) {
         // null out the password - just in case ...
         user.setPassword(null);
-        session.setAttribute(USER, user);
+        getSession().setAttribute(USER, user);
         return null;
+    }
+
+    private HttpSession getSession() {
+        HttpServletRequest req = ProtectedContext.getCurrentRequest();
+        if (req == null) {
+            throw new IllegalStateException("No current ServletRequest!");
+        }
+        return req.getSession();
     }
 }

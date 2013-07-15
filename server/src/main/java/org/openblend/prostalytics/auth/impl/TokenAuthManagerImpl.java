@@ -1,19 +1,18 @@
 package org.openblend.prostalytics.auth.impl;
 
-import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.openblend.prostalytics.auth.AuthManager;
 import org.openblend.prostalytics.auth.dao.AuthDAO;
 import org.openblend.prostalytics.auth.domain.Token;
 import org.openblend.prostalytics.auth.domain.User;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import java.util.UUID;
 
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
-@Exclude
+@Alternative
 public class TokenAuthManagerImpl implements AuthManager {
 
     private static final ThreadLocal<User> tlu = new ThreadLocal<User>();

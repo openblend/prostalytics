@@ -1,0 +1,5 @@
+<beans>
+    <alternatives>
+        <class>org.openblend.prostalytics.auth.impl.SessionAuthManagerImpl</class>
+    </alternatives>
+</beans>

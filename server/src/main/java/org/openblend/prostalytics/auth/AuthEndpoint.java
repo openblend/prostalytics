@@ -1,9 +1,9 @@
 package org.openblend.prostalytics.auth;
 
-import org.openblend.prostalytics.controller.Navigation;
 import org.openblend.prostalytics.auth.dao.AuthDAO;
 import org.openblend.prostalytics.auth.dao.UserDAO;
 import org.openblend.prostalytics.auth.domain.User;
+import org.openblend.prostalytics.controller.Navigation;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,7 +48,7 @@ public class AuthEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
     public Response register(@FormParam("username") String username,
-            @FormParam("email") String email, @FormParam("name") String name, @FormParam("lastName") String lastName,
+            @FormParam("email") String email, @FormParam("name") String name, @FormParam("lastname") String lastName,
             @FormParam("password") String password) throws URISyntaxException {
 
         try {
@@ -65,6 +65,7 @@ public class AuthEndpoint {
             URI uri = UriBuilder.fromUri(uriInfo.getBaseUri().resolve(Navigation.fromAuthRegister(Navigation.OK))).build();
             return Response.seeOther(uri).build();
         } catch (Throwable e) {
+            e.printStackTrace();  // TODO :)
             URI uri = UriBuilder.fromUri(uriInfo.getBaseUri().resolve(Navigation.fromAuthRegister(Navigation.ERROR, e))).build();
             return Response.seeOther(uri).build();
         }

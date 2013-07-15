@@ -1,9 +1,12 @@
 package org.openblend.prostalytics.controller;
 
+import org.openblend.prostalytics.framework.ProtectedContext;
+
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
-public class Navigation {
+public class Navigation extends ProtectedContext {
+
     public static final String OK = "ok";
     public static final String ERROR = "error";
 
@@ -12,12 +15,7 @@ public class Navigation {
     }
 
     public static String fromAuthRegister(String status, Throwable e) {
-        if (OK.equals(status)) {
-            return "home.xthml";
-        } else if (ERROR.equals(status)) {
-            return "register.html";
-        }
-        throw new IllegalArgumentException("status = " + status);
+        return getContext() + ContextNavigation.fromAuthRegister(status, e);
     }
 
     public static String fromLogin(String status) {
@@ -25,11 +23,10 @@ public class Navigation {
     }
 
     public static String fromLogin(String status, Throwable e) {
-        if (OK.equals(status)) {
-            return "home.xthml";
-        } else if (ERROR.equals(status)) {
-            return "login.html";
-        }
-        throw new IllegalArgumentException("status = " + status);
+        return getContext() + ContextNavigation.fromLogin(status, e);
+    }
+
+    private static String getContext() {
+        return ProtectedContext.getCurrentRequest().getContextPath();
     }
 }

@@ -52,7 +52,7 @@ public class AuthDAOImpl extends AbstractDAOImpl implements AuthDAO {
         Query query = new Query(User.KIND);
 
         List<Query.Filter> filters = new ArrayList<Query.Filter>();
-        filters.add(new Query.FilterPredicate(User.NAME, Query.FilterOperator.EQUAL, username));
+        filters.add(new Query.FilterPredicate(User.USERNAME, Query.FilterOperator.EQUAL, username));
         filters.add(new Query.FilterPredicate(User.PASSWORD, Query.FilterOperator.EQUAL, passwordHash));
         query.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, filters));
 

@@ -9,148 +9,7 @@
 	<ui:param name="selectedMenuId" value="form-jsf" />
 
     <ui:define name="head">
-
-<script>
-//<![CDATA[
-
-var formsDef = {};
-
-//blocking request to read form metadata
-$.ajax({
-	async: false,
-	dataType: "json",
-   	url: '#{ctxRoot}rest-mock/patient-form.json',
-   	success: (function(data) {
-	      	  window.formsDef["patient"] = data;
-   			  })
-});
-
-           
-function bvRulesValidate(elem, attr, value) {
-	valid = true;
-
-	var ngSplit = attr.ngModel.split(".");
-	var object = ngSplit[0];
-	var field = ngSplit[1];
-
-	if (object != undefined && field != undefined ) {
-		var fieldDef = window.formsDef[object][field];
-		if (fieldDef.required != undefined) {
-			if (fieldDef.required == 'nonEmpty') {
-				valid = (value != undefined && value != "");
-			} else if (fieldDef.required == 'date') {
-				valid = datePatt.test(value);
-			}
-		}
-	}
-	return valid;	
-}
-
-
-var app = angular.module('myApp', []);
-/* http://www.benlesh.com/2012/12/angular-js-custom-validation-via.html */
-app.directive('bvRules', function() {
-    return {
-        // restrict to an attribute type.
-        restrict: 'A',
-        
-        // element must have ng-model attribute.
-        require: 'ngModel',
-        
-        // scope = the parent scope
-        // elem = the element the directive is on
-        // attr = a dictionary of attributes on the element
-        // ctrl = the controller for ngModel.
-        link: function(scope, elem, attr, ctrl) {
-
-            // add a parser that will process each time the value is 
-            // parsed into the model when the user updates it.
-            ctrl.$parsers.unshift(function(value) {
-                // test and set the validity after update.
-                var valid = bvRulesValidate(elem, attr, value);
-                ctrl.$setValidity('bvRules', valid);
-                
-                // if it's valid, return the value to the model, 
-                // otherwise return undefined.
-                return valid ? value : undefined;
-            });
-            
-            // add a formatter that will process each time the value 
-            // is updated on the DOM element.
-            ctrl.$formatters.unshift(function(value) {
-                // validate.
-                var valid = bvRulesValidate(elem, attr, value);
-                ctrl.$setValidity('bvRules', valid);
-                // return the value or nothing will be written to the DOM.
-                return value;
-            });
-        }
-    };
-});
-
-
-function PatientFormCtrl($scope, $http) {
-
-	var id = getURLParameter('id');
-
-	if (id != null) {
-	    /*$http.get('#{ctxRoot}rest-mock/patient-' + id + '.json').success(function(data) {
-	    	  $scope.patient = data;
-	    });*/
-        $.ajax({
-            //async: false,
-            dataType: "json",
-            url: '#{ctxRoot}rest/patient/' + id,
-            success: (function(data) {
-                $scope.patient = data;
-            })
-        });
-	}
-	
-    $scope.postFormData = function(form) {
-    	form.submitted = true;
-    	if (form.$valid) {
-			alert("posting: " + angular.toJson($scope.patient));
-			$http({
-			    method: 'POST',
-			    url: '#{ctxRoot}rest/patient/',
-			    data: angular.toJson($scope.patient),
-			    headers: {'Content-Type': 'application/json'}
-			});
-			/*$.ajax({
-				type: "POST",
-				url: '#{ctxRoot}/rest/patient/',
-				data: data,
-				success: success,
-				dataType: dataType
-				});*/
-		} else {
-			alert("incomplete");
-		}
-	};
-
-	$scope.validateField = function(form, field) {
- 		//return (!field.$valid && (field.$dirty || form.submitted))
- 		return (!field.$valid )
-    };
-
-	/* $scope.dateOptions = {
-    	dateFormat: "yy-mm-dd"
-    };*/
-
-    $scope.activeTab = 'personal';
-    $scope.switchTab = function(tabName, valid) {
-    	if(valid) { 
-    		$scope.activeTab = tabName;
-		} else {
-			alert("invalid form");
-		}
-    }
-	window.scope = $scope;
-}
-//]]>
-</script>
-    
+        <script src="js/form.js"></script>
 	</ui:define>
 
     <ui:define name="title">Patient: <span ng-controller="PatientFormCtrl">{{patient.code}}</span></ui:define>
@@ -163,7 +22,7 @@ function PatientFormCtrl($scope, $http) {
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
 	
-	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="myApp">
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="plyticsModule">
 	<tr valign="top">
 	<td>
 	
@@ -215,7 +74,7 @@ function PatientFormCtrl($scope, $http) {
 			</td>
 		</tr>
 		<tr>
-			<th valign="top">Bitrh date:</th>
+			<th valign="top">Birth date:</th>
 			<!--td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td-->
 			<td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" bv-rules="bv-rules"/></td>
 			<td>

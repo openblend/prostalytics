@@ -1,155 +1,134 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       lang="sl" xml:lang="sl">
 <head>
-	<title>prostalytics</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="description" content="jfacebook" />
-	<meta name="keywords" content="jfacebook" />
-	<meta name="robots" content="noindex, nofollow" />
-	<meta name="revisit-after" content="30 days" />
-	<!--[if IE]>
-	<link rel="stylesheet" media="all" type="text/css" href="#{ctxRoot}css/pro_dropline_ie.css" />
-	<![endif]-->
-	
-    <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+   <title>prostalytics</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+   <meta name="description" content="jfacebook"/>
+   <meta name="keywords" content="jfacebook"/>
+   <meta name="robots" content="noindex, nofollow"/>
+   <meta name="revisit-after" content="30 days"/>
 
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
-    <!-- link rel="stylesheet" type="text/css" href="http://angular-ui.github.com/angular-ui/build/angular-ui.css" /-->
+   <!--[if IE]>
+   <link rel="stylesheet" media="all" type="text/css" href="css/pro_dropline_ie.css"/>
+   <![endif]-->
 
-    <!-- script type='text/javascript' src="http://code.angularjs.org/1.0.3/angular.min.js"></script -->
-    <!-- script type='text/javascript' src="http://angular-ui.github.com/angular-ui/build/angular-ui.js"></script-->
+   <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"/>
+   <!-- link rel="stylesheet" type="text/css" href="http://angular-ui.github.com/angular-ui/build/angular-ui.css" /-->
+   <link type="text/css" rel="stylesheet" media="screen,projection" href="css/screen.css" title="default"/>
+
+   <!-- script type='text/javascript' src="http://code.angularjs.org/1.0.3/angular.min.js"></script -->
+   <!-- script type='text/javascript' src="http://angular-ui.github.com/angular-ui/build/angular-ui.js"></script-->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+   <script src="js/jquery/ui.checkbox.js"></script>
+   <script src="js/jquery/jquery.bind.js"></script>
+
    <script src="lib/angular/angular.js"></script>
    <script src="lib/angular/angular-cookies.js"></script>
    <script src="lib/angular/angular-resource.js"></script>
    <script src="lib/angular/angular-sanitize.js"></script>
 
-	<script src="#{ctxRoot}js/jquery/ui.checkbox.js" type="text/javascript"></script>
-	<script src="#{ctxRoot}js/jquery/jquery.bind.js" type="text/javascript"></script>
    <script src="js/app.js"></script>
    <script src="js/controllers.js"></script>
    <script src="js/services.js"></script>
    <script src="js/openblend.js"></script>
 
-	<link type="text/css" rel="stylesheet" media="screen,projection" href="#{ctxRoot}css/screen.css" title="default" />
+   <!--[if IE 7]><!-->
+   <!--  styled select box script version 1 -->
+   <script src="js/jquery/jquery.selectbox-0.5.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      //var datePatt=new RegExp(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+      //yyyy-MM-dd
+      var datePatt = new RegExp(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      $(document).ready(function () {
+         $('.styledselect').selectbox({ inputClass:"selectbox_styled" });
+      });
+   </script>
+   <!--<![endif]-->
 
 
-<!--[if IE 7]><!-->
+   <!--  styled select box script version 2 -->
+   <script src="js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      $(document).ready(function () {
+         $('.styledselect_form_1').selectbox({ inputClass:"styledselect_form_1" });
+         $('.styledselect_form_2').selectbox({ inputClass:"styledselect_form_2" });
+      });
+   </script>
 
-<!--  styled select box script version 1 -->
-<script src="#{ctxRoot}js/jquery/jquery.selectbox-0.5.js" type="text/javascript"></script>
-<script type="text/javascript">
+   <!--  styled select box script version 3 -->
+   <script src="js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      $(document).ready(function () {
+         $('.styledselect_pages').selectbox({ inputClass:"styledselect_pages" });
+      });
+   </script>
 
-//var datePatt=new RegExp(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-//yyyy-MM-dd
-var datePatt=new RegExp(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+   <!--  styled file upload script -->
+   <!-- script src="js/jquery/jquery.filestyle.js" type="text/javascript"></script>
+   <script type="text/javascript" charset="utf-8">
+   $(function() {
+      $("input.file_1").filestyle({
+      image: "images/forms/upload_file.gif",
+      imageheight : 29,
+      imagewidth : 78,
+      width : 300
+      });
+   });
+   </script>
+   -->
 
+   <!-- Custom jquery scripts -->
+   <script src="js/jquery/custom_jquery.js" type="text/javascript"></script>
 
+   <!-- Tooltips -->
+   <!-- <script src="js/jquery/jquery.tooltip.js" type="text/javascript"></script>
+   <script src="js/jquery/jquery.dimensions.js" type="text/javascript"></script>
+   <script type="text/javascript">
+   $(function() {
+     $('a.info-tooltip ').tooltip({
+        track: true,
+        delay: 0,
+        fixPNG: true,
+        showURL: false,
+        showBody: " - ",
+        top: -35,
+        left: 5
+     });
+   });
+   </script>
+   -->
 
-$(document).ready(function() {
-	$('.styledselect').selectbox({ inputClass: "selectbox_styled" });
-});
-</script>
- 
+   <script type="text/javascript">
+      angular.element(document).ready(function () {
+         //angular.bootstrap(document, ['ui.directives']);
+         angular.bootstrap(document);
+      });
+      $(document).ready(function () {
+         selectMenu();
+      });
+      function selectMenu() {
+         var selectedMenuId = "#{selectedMenuId}";
+         if (selectedMenuId != "") {
+            $("#" + selectedMenuId).attr("class", "current");
+         }
+      }
+   </script>
 
-<!--<![endif]-->
+   <!-- link rel="icon" type="image/x-icon" href="/favicon.ico" /-->
+   <ui:insert name="head"/>
 
-
-<!--  styled select box script version 2 --> 
-<script src="#{ctxRoot}js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.styledselect_form_1').selectbox({ inputClass: "styledselect_form_1" });
-	$('.styledselect_form_2').selectbox({ inputClass: "styledselect_form_2" });
-});
-</script>
-
-<!--  styled select box script version 3 --> 
-<script src="#{ctxRoot}js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.styledselect_pages').selectbox({ inputClass: "styledselect_pages" });
-});
-</script>
-
-<!--  styled file upload script --> 
-<!-- script src="#{ctxRoot}js/jquery/jquery.filestyle.js" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-$(function() {
-	$("input.file_1").filestyle({ 
-	image: "images/forms/upload_file.gif",
-	imageheight : 29,
-	imagewidth : 78,
-	width : 300
-	});
-});
-</script>
--->
-
-<!-- Custom jquery scripts -->
-<script src="#{ctxRoot}js/jquery/custom_jquery.js" type="text/javascript"></script>
- 
-<!-- Tooltips -->
-<!-- <script src="#{ctxRoot}js/jquery/jquery.tooltip.js" type="text/javascript"></script>
-<script src="#{ctxRoot}js/jquery/jquery.dimensions.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function() {
-	$('a.info-tooltip ').tooltip({
-		track: true,
-		delay: 0,
-		fixPNG: true, 
-		showURL: false,
-		showBody: " - ",
-		top: -35,
-		left: 5
-	});
-});
-</script> 
- -->
-
-	
-
-	
-<script type="text/javascript">
-
-angular.element(document).ready(function() {
-	//angular.bootstrap(document, ['ui.directives']);
-	angular.bootstrap(document);
-});
-
-$(document).ready(function(){
-	selectMenu();
-});
-
-function selectMenu() {
-	var selectedMenuId = "#{selectedMenuId}";
-	if (selectedMenuId != "") {
-		$("#" + selectedMenuId).attr("class","current");
-	}	
-}
-
-</script>
-	
-	
-	
-	<!-- link rel="icon" type="image/x-icon" href="/favicon.ico" /-->
-	<ui:insert name="head"/>
-
-<!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
-<script src="#{ctxRoot}js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-$(document).pngFix( );
-});
-</script>
+   <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
+   <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      $(document).ready(function () {
+         $(document).pngFix();
+      });
+   </script>
 </head>
 <body>
-
-
-
-
 
 <!-- Start: page-top-outer -->
 <div id="page-top-outer">    
@@ -157,110 +136,107 @@ $(document).pngFix( );
 <!-- Start: page-top -->
 <div id="page-top">
 
-	<!-- start logo -->
-	<div id="logo">
-	<a href=""><img src="#{ctxRoot}images/shared/logo.png" width="156" height="40" alt="" /></a>
-	</div>
-	<!-- end logo -->
-	
-	<!--  start top-search -->
-	<div id="top-search">
-		<form>
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-		<td><input type="text" name="query" placeholder="Search" class="top-search-inp" /></td>
-		<td>
-		 
-		<!-- select  class="styledselect">
-			<option value="">All</option>
-			<option value="">Products</option>
-			<option value="">Categories</option>
-			<option value="">Clients</option>
-			<option value="">News</option>
-		</select--> 
-		 
-		</td>
-		<td>
-		<input type="image" src="#{ctxRoot}images/shared/top_search_btn.gif" onclick="this.form.submit();" />
-		</td>
-		</tr>
-		</table>
-		</form>
-	</div>
- 	<!--  end top-search -->
- 	<div class="clear"></div>
+   <!-- start logo -->
+   <div id="logo">
+      <a href=""><img src="images/shared/logo.png" width="156" height="40" alt="" /></a>
+   </div>
+   <!-- end logo -->
 
+   <!--  start top-search -->
+   <div id="top-search">
+   <form>
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+      <td><input type="text" name="query" placeholder="Search" class="top-search-inp" /></td>
+      <td>
+
+      <!-- select  class="styledselect">
+         <option value="">All</option>
+         <option value="">Products</option>
+         <option value="">Categories</option>
+         <option value="">Clients</option>
+         <option value="">News</option>
+      </select-->
+
+      </td>
+      <td>
+      <input type="image" src="images/shared/top_search_btn.gif" onclick="this.form.submit();" />
+      </td>
+      </tr>
+      </table>
+   </form>
+   </div>
+   <!--  end top-search -->
+   <div class="clear"></div>
 </div>
 <!-- End: page-top -->
 
 </div>
 <!-- End: page-top-outer -->
-	
 <div class="clear">&nbsp;</div>
  
 <!--  start nav-outer-repeat ................................................................................................. START -->
 <div class="nav-outer-repeat"> 
 <!--  start nav-outer -->
-<div class="nav-outer"> 
+<div class="nav-outer">
 
-		<!-- start nav-right -->
-		<div id="nav-right">
-		
-			<div class="nav-divider">&nbsp;</div>
-			<div class="showhide-account"><a href="#{ctxRoot}admin.jsf" id="admin"><img src="#{ctxRoot}images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></a></div>
-			<div class="nav-divider">&nbsp;</div>
-			<a href="#{ctxRoot}logout.jsf" id="logout"><img src="#{ctxRoot}images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
-			<div class="clear">&nbsp;</div>
-		
-			<!--  start account-content -->	
-			<div class="account-content">
-			<div class="account-drop-inner">
-				<a href="" id="acc-settings">Settings</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-details">Personal details </a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-project">Project details</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-inbox">Inbox</a>
-				<div class="clear">&nbsp;</div>
-				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-stats">Statistics</a> 
-			</div>
-			</div>
-			<!--  end account-content -->
-		
-		</div>
-		<!-- end nav-right -->
+   <!-- start nav-right -->
+   <div id="nav-right">
+
+   <div class="nav-divider">&nbsp;</div>
+   <div class="showhide-account"><a href="admin.jsf" id="admin"><img src="images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></a></div>
+   <div class="nav-divider">&nbsp;</div>
+   <a href="logout.jsf" id="logout"><img src="images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
+   <div class="clear">&nbsp;</div>
+
+   <!--  start account-content -->
+   <div class="account-content">
+   <div class="account-drop-inner">
+      <a href="" id="acc-settings">Settings</a>
+      <div class="clear">&nbsp;</div>
+      <div class="acc-line">&nbsp;</div>
+      <a href="" id="acc-details">Personal details </a>
+      <div class="clear">&nbsp;</div>
+      <div class="acc-line">&nbsp;</div>
+      <a href="" id="acc-project">Project details</a>
+      <div class="clear">&nbsp;</div>
+      <div class="acc-line">&nbsp;</div>
+      <a href="" id="acc-inbox">Inbox</a>
+      <div class="clear">&nbsp;</div>
+      <div class="acc-line">&nbsp;</div>
+      <a href="" id="acc-stats">Statistics</a>
+   </div>
+   </div>
+   <!--  end account-content -->
+
+   </div>
+   <!-- end nav-right -->
 
 
-		<!--  start nav -->
-		<div class="nav">
-		<div class="table">
-		
-		<ul id="browse-jsf" class="select">
-		<li>
-			<a href="#{ctxRoot}browse.jsf"><b>Browse</b><!--[if IE 7]><!--></a><!--<![endif]-->
-		</li>
-		</ul>
-		
-		<div class="nav-divider">&nbsp;</div>
-		                    
-		<!-- ul class="current"-->
-		<ul id="form-jsf" class="select">
-		<li>
-			<a href="#{ctxRoot}form.jsf"><b>Create new</b><!--[if IE 7]><!--></a><!--<![endif]-->
-		</li>
-		</ul>
-		
-		<div class="clear"/>
-		</div>
-		<div class="clear"/>
-		</div>
-		<!-- END start nav -->
+   <!--  start nav -->
+   <div class="nav">
+      <div class="table">
 
+         <ul id="browse-jsf" class="select">
+         <li>
+         <a href="browse.jsf"><b>Browse</b><!--[if IE 7]><!--></a><!--<![endif]-->
+         </li>
+         </ul>
+
+         <div class="nav-divider">&nbsp;</div>
+
+         <!-- ul class="current"-->
+         <ul id="form-jsf" class="select">
+         <li>
+         <a href="form.jsf"><b>Create new</b><!--[if IE 7]><!--></a><!--<![endif]-->
+         </li>
+         </ul>
+
+         <div class="clear"/>
+      </div>
+      <div class="clear"/>
+   </div>
+   <!-- END start nav -->
 </div>
 <div class="clear"></div>
 <!--  start nav-outer -->
@@ -277,36 +253,34 @@ $(document).pngFix( );
 <div id="page-heading"><h1><ui:insert name="title"/></h1></div>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table" ng-cloak="ng-cloak">
-<tr>
-	<th rowspan="3" class="sized"><img src="#{ctxRoot}images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
-	<th class="topleft"></th>
-	<td id="tbl-border-top">&nbsp;</td>
-	<th class="topright"></th>
-	<th rowspan="3" class="sized"><img src="#{ctxRoot}images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
-</tr>
-<tr>
-	<td id="tbl-border-left"></td>
-	<td>
-	
-	<ui:insert name="content" />
-	
-	</td>
-	<td id="tbl-border-right"></td>
-</tr>
-<tr>
-	<th class="sized bottomleft"></th>
-	<td id="tbl-border-bottom">&nbsp;</td>
-	<th class="sized bottomright"></th>
-</tr>
-</table>	
-	
-	
-	
-	
+   <tr>
+      <th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+      <th class="topleft"></th>
+      <td id="tbl-border-top">&nbsp;</td>
+      <th class="topright"></th>
+      <th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
+   </tr>
+   <tr>
+      <td id="tbl-border-left"></td>
+      <td>
+
+      <ui:insert name="content" />
+
+      </td>
+      <td id="tbl-border-right"></td>
+   </tr>
+   <tr>
+      <th class="sized bottomleft"></th>
+      <td id="tbl-border-bottom">&nbsp;</td>
+      <th class="sized bottomright"></th>
+   </tr>
+</table>
+
 
 <div class="clear">&nbsp;</div>
 </div>
 <!--  end content -->
+
 <div class="clear">&nbsp;</div>
 </div>
 <!--  end content-outer -->
@@ -317,12 +291,12 @@ $(document).pngFix( );
     
 <!-- start footer -->         
 <div id="footer">
-	<!--  start footer-left -->
-	<div id="footer-left">
-	Admin Skin &copy; Copyright Internet Dreams Ltd. <a href="">www.netdreams.co.uk</a>. All rights reserved.</div>
-	<!--  end footer-left -->
-	<div class="clear">&nbsp;</div>
-</div>
+   <!--  start footer-left -->
+   <div id="footer-left">
+   Admin Skin &copy; Copyright Internet Dreams Ltd. <a href="">www.netdreams.co.uk</a>. All rights reserved.</div>
+   <!--  end footer-left -->
+   <div class="clear">&nbsp;</div>
+   </div>
 <!-- end footer -->
  
 </body>

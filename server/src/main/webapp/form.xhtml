@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -6,202 +6,187 @@
       >
 
 <ui:composition template="/layout/template.xhtml">
-	<ui:param name="selectedMenuId" value="form-jsf" />
+    <ui:param name="selectedMenuId" value="form-jsf" />
 
     <ui:define name="head">
         <script src="js/form.js"></script>
-	</ui:define>
+    </ui:define>
 
     <ui:define name="title">Patient: <span ng-controller="PatientFormCtrl">{{patient.code}}</span></ui:define>
 
     <ui:define name="content">
-		
+
+    <!--  start content-table-inner -->
+    <div id="content-table-inner">
+
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="plytics">
+        <tr valign="top">
+        <td>
+
+        <!--  start step-holder -->
+        <div id="step-holder">
+            <div class="step-no">1</div>
+            <div class="step-dark-left" ng-click="switchTab('personal', rrpForm.$valid);">
+                Personal data
+            </div>
+            <div class="step-dark-right">&nbsp;</div>
+
+            <div ng-class="{true:'step-no', false:'step-no-off'}[personalForm.$valid]">2</div>
+            <div ng-class="{true:'step-dark-left', false:'step-light-left'}[personalForm.$valid]" ng-click="switchTab('rrp', personalForm.$valid);">
+                Osnovni rrp
+            </div>
+            <div ng-class="{true:'step-dark-right', false:'step-light-right'}[personalForm.$valid]">&nbsp;</div>
+
+            <div class="step-no-off">3</div>
+            <div class="step-light-left">Preview</div>
+            <div class="step-light-round">&nbsp;</div>
+            <div class="clear"></div>
+        </div>
+        <!--  end step-holder -->
+
+        <form name="personalForm" ng-show="activeTab == 'personal'">
+            <!-- start id-form -->
+            <table border="0" cellpadding="0" cellspacing="0" class="formTable">
+                <tr>
+                    <th valign="top" id="name_desc">Surname:</th>
+                    <!--td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td-->
+                    <td><input id="patient_surname" name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" bv-rules="bv-rules"/></td>
+                    <td>
+        <!-- div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
+          <div class="error-left"></div>
+          <div class="error-inner">This field is required.</div>
+        </div-->
+                    </td>
+                </tr>
+                <tr>
+                    <th valign="top">Name:</th>
+                    <td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" bv-rules="bv-rules"/></td>
+                    <td>
+                        <div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_name)">
+                            <div class="error-left"></div>
+                            <div class="error-inner">This field is required.</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th valign="top">Birth date:</th>
+                    <!--td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td-->
+                    <td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" bv-rules="bv-rules"/></td>
+                    <td>
+                        <div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_birthDate)">
+                            <div class="error-left"></div>
+                            <div class="error-inner">This field is required.</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th valign="top">External ID:</th>
+                    <td><input type="text" name="patient_externalId" class="inp-form" ng-model="patient.externalId" bv-rules="bv-rules"/></td>
+                    <td>
+                        <div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_externalId)">
+                            <div class="error-left"></div>
+                            <div class="error-inner">This field is required.</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td valign="top">
+                        <input type="button" value="Save" class="form-submit" ng-click="postFormData(personalForm);"/>
+                        <!-- input type="button" value="" class="form-reset"  /-->
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
 
 
+        <!-- second tab -->
 
-	<!--  start content-table-inner -->
-	<div id="content-table-inner">
-	
-	<table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="plytics">
-	<tr valign="top">
-	<td>
-	
-		<!--  start step-holder -->
-		<div id="step-holder">
-			<div class="step-no">1</div>
-			<div class="step-dark-left"
-					ng-click="switchTab('personal', rrpForm.$valid);">
-				Personal data</div>
-			<div class="step-dark-right">&nbsp;</div>
-			
-			<div ng-class="{true:'step-no', false:'step-no-off'}[personalForm.$valid]">2</div>
-			<div ng-class="{true:'step-dark-left', false:'step-light-left'}[personalForm.$valid]" ng-click="switchTab('rrp', personalForm.$valid);">
-				Osnovni rrp
-			</div>
-			<div ng-class="{true:'step-dark-right', false:'step-light-right'}[personalForm.$valid]">&nbsp;</div>
-			
-			<div class="step-no-off">3</div>
-			<div class="step-light-left">Preview</div>
-			<div class="step-light-round">&nbsp;</div>
-			<div class="clear"></div>
-		</div>
-		<!--  end step-holder -->
-		
-		
-	
-		<form name="personalForm" ng-show="activeTab == 'personal'">
-		<!-- start id-form -->
-		<table border="0" cellpadding="0" cellspacing="0"  class="formTable">
-		<tr>
-			<th valign="top" id="name_desc">Surname:</th>
-			<!--td><input name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" required="true" /></td-->
-			<td><input id="patient_surname" name="patient_surname" type="text" class="inp-form" ng-model="patient.surname" bv-rules="bv-rules"/></td>
-			<td>
-			<!-- div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_surname)">
-				<div class="error-left"></div>
-				<div class="error-inner">This field is required.</div>
-			</div-->
-			</td>
-		</tr>
-		<tr>
-			<th valign="top">Name:</th>
-			<td><input type="text" name="patient_name" class="inp-form" ng-model="patient.name" bv-rules="bv-rules" /></td>
-			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_name)">
-				<div class="error-left"></div>
-				<div class="error-inner">This field is required.</div>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<th valign="top">Birth date:</th>
-			<!--td><input ng-model="dateBirth" name="date_birth" ui-date="dateOptions" class="inp-form" required="true"/></td-->
-			<td><input ng-model="patient.birthDate" name="patient_birthDate" class="inp-form" bv-rules="bv-rules"/></td>
-			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_birthDate)">
-				<div class="error-left"></div>
-				<div class="error-inner">This field is required.</div>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<th valign="top">External ID:</th>
-			<td><input type="text" name="patient_externalId" class="inp-form" ng-model="patient.externalId" bv-rules="bv-rules"/></td>
-			<td>
-			<div id="name_msg" ng-show="validateField(personalForm, personalForm.patient_externalId)">
-				<div class="error-left"></div>
-				<div class="error-inner">This field is required.</div>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<th>&nbsp;</th>
-			<td valign="top">
-				<input type="button" value="Save" class="form-submit" ng-click="postFormData(personalForm);" />
-				<!-- input type="button" value="" class="form-reset"  /-->
-			</td>
-			<td></td>
-		</tr>
+        <form name="rrpForm" novalidate="false" class="formTable" ng-show="activeTab == 'rrp'">
+            <!-- start id-form -->
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th valign="top">Trus date:</th>
+                    <td><input ng-model="trusDate" name="trus_date" class="inp-form" bv-rules="bv-rules"/>
+                    </td>
+                    <td>
+                        <div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_date)">
+                            <div class="error-left"></div>
+                            <div class="error-inner">This field is required.</div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th valign="top">Trus psa as bx:</th>
+                    <td><input type="number" ng-model="trusPsaBx" name="trus_psa_bx" class="inp-form"
+                               bv-rules="bv-rules"/></td>
+                    <td>
+                        <div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_psa_bx)">
+                            <div class="error-left"></div>
+                            <div class="error-inner">Number required.</div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th valign="top">Trus DRE:</th>
+                    <td>
+                        <select class="styledselect_form_1">
+                            <option value="">no</option>
+                            <option value="">positive</option>
+                            <option value="">negative</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
 
 
-		</table>
-		</form>
+                <tr>
+                    <th valign="top">true or false:</th>
+                    <td>
+                        <div class="radioLine"><input type="radio" value="true" ng-model="trueFalse"/><span
+                                class="radioLabel">True</span></div>
+                        <div class="radioLine"><input type="radio" value="false" ng-model="trueFalse"/><span
+                                class="radioLabel">False</span></div>
+                    </td>
+                    <td></td>
+                </tr>
 
-	
-	<!-- second tab -->
-
-		<form name="rrpForm" novalidate="false" class="formTable" ng-show="activeTab == 'rrp'">
-		<!-- start id-form -->
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<th valign="top">Trus date:</th>
-			<td><input ng-model="trusDate" name="trus_date" class="inp-form" bv-rules="bv-rules"/></td>
-			<td>
-			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_date)">
-				<div class="error-left"></div>
-				<div class="error-inner">This field is required.</div>
-			</div>
-			</td>
-		</tr>
-		
-		<tr>
-			<th valign="top">Trus psa as bx:</th>
-			<td><input type="number" ng-model="trusPsaBx" name="trus_psa_bx" class="inp-form" bv-rules="bv-rules" /></td>
-			<td>
-			<div id="name_msg" ng-show="validateField(rrpForm, rrpForm.trus_psa_bx)">
-				<div class="error-left"></div>
-				<div class="error-inner">Number required.</div>
-			</div>
-			</td>
-		</tr>
-		
-		<tr>
-			<th valign="top">Trus DRE:</th>
-			<td>	
-				<select class="styledselect_form_1">
-					<option value="">no</option>
-					<option value="">positive</option>
-					<option value="">negative</option>
-				</select>
-			</td>
-			<td></td>
-		</tr>
-		
+                <tr>
+                    <th valign="top">Description:</th>
+                    <td><textarea rows="" cols="" class="form-textarea"></textarea></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td valign="top">
+                        <input type="button" value="Save" class="form-submit"
+                               ng-click="postFormData(personalForm);"/>
+                        <!-- input type="button" value="" class="form-reset"  /-->
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
 
 
-		<tr>
-			<th valign="top">true or false:</th>
-			<td>	
-				<div class="radioLine"><input type="radio" value="true" ng-model="trueFalse" /><span class="radioLabel">True</span></div>
-				<div class="radioLine"><input type="radio" value="false" ng-model="trueFalse" /><span class="radioLabel">False</span></div>
-			</td>
-			<td></td>
-		</tr>
+        </td>
+        <td>
 
-		<tr>
-			<th valign="top">Description:</th>
-			<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
-			<td></td>
-		</tr>
-		<tr>
-			<th>&nbsp;</th>
-			<td valign="top">
-				<input type="button" value="Save" class="form-submit" ng-click="postFormData(personalForm);" />
-				<!-- input type="button" value="" class="form-reset"  /-->
-			</td>
-			<td></td>
-		</tr>
-	</table>
-	</form>
-
-
-
-	</td>
-	<td>
-
-</td>
-</tr>
-<tr>
-<td><img src="#{ctxRoot}images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
-<td></td>
-</tr>
-</table>
+        </td>
+        </tr>
+        <tr>
+        <td><img src="images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
+        <td></td>
+        </tr>
+    </table>
  
 <div class="clear"></div>
- 
-
 </div>
 <!--  end content-table-inner  -->
 
-
- 
-
-
-
-
-
-
-    </ui:define>
-
+</ui:define>
 </ui:composition>
 </html>

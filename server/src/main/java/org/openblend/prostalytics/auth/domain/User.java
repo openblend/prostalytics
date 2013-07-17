@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.google.appengine.api.datastore.Entity;
 import com.google.common.base.Function;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author <a href="mailto:marko.strukelj@gmail.com">Marko Strukelj</a>
  */
@@ -26,7 +28,7 @@ public class User implements Serializable {
     public static final String PASSWORD = "password";
 
 
-    private long id;
+    private long id = -1;
     private String username;
     private String email;
     private String name;
@@ -97,7 +99,7 @@ public class User implements Serializable {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastname(String lastName) {
         this.lastName = lastName;
     }
 

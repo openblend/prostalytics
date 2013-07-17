@@ -36,6 +36,7 @@
         <version.javax.faces.impl>2.1.3-b02-jbossorg-2</version.javax.faces.impl>
         <version.javax.el>1.2</version.javax.el>
         <version.javax.el.impl>1.2</version.javax.el.impl>
+        <version.org.codehaus.jackson>1.9.12</version.org.codehaus.jackson>
         <version.junit>4.10</version.junit>
     </properties>
 
@@ -285,6 +286,12 @@
                 <artifactId>junit</artifactId>
                 <version>${version.junit}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>${version.org.codehaus.jackson}</version>
             </dependency>
 
         </dependencies>

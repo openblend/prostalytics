@@ -14,6 +14,7 @@
     <description>Prostalytics App Server Side</description>
 
     <build>
+        <finalName>prostalytics</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

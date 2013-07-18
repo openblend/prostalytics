@@ -44,7 +44,7 @@ public class AuthEndpoint {
     private AuthManager auth;
 
     /*
-    * curl --data "username=test2&name=Test&lastname=Tester&email=yourmail@gmail.com&password=test" http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/rest/auth/register
+    * curl --data "username=test2&name=Test&lastname=Tester&email=yourmail@gmail.com&password=test" http://localhost:8080/prostalytics/rest/auth/register
     *
     */
     @Path("/register")
@@ -77,7 +77,7 @@ public class AuthEndpoint {
 
 
     /*
-     * curl --data '{"username":"test2","name":"Test","lastname":"Tester","email":"yourmail@gmail.com","password":"test"}' http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/rest/auth/register --header "Content-Type:application/json"
+     * curl --data '{"username":"test2","name":"Test","lastname":"Tester","email":"yourmail@gmail.com","password":"test"}' http://localhost:8080/prostalytics/rest/auth/register --header "Content-Type:application/json"
      *
      */
     @Path("/register")
@@ -102,7 +102,7 @@ public class AuthEndpoint {
     }
 
     /*
-     * curl --data "username=test2&password=test" http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/rest/auth/login
+     * curl --data "username=test2&password=test" http://localhost:8080/prostalytics/rest/auth/login
      *
      */
     @Path("/login")
@@ -133,7 +133,7 @@ public class AuthEndpoint {
     }
 
     /*
-     * curl --data '{"username":"test2","password":"test"}' http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/rest/auth/login --header "Content-Type:application/json"
+     * curl --data '{"username":"test2","password":"test"}' http://localhost:8080/prostalytics/rest/auth/login --header "Content-Type:application/json"
      *
      */
     @Path("/login")

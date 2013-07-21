@@ -29,4 +29,8 @@ public class Navigation extends ProtectedContext {
     private static String getContext() {
         return ProtectedContext.getCurrentRequest().getContextPath();
     }
+
+    public static String toLogin() {
+        return getContext() + ContextNavigation.toLogin();
+    }
 }

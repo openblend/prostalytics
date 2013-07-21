@@ -14,7 +14,7 @@ public class ContextNavigation {
 
     public static String fromAuthRegister(String status, Throwable e) {
         if (OK.equals(status)) {
-            return "/home.jsf";
+            return "/login.html";
         } else if (ERROR.equals(status)) {
             return "/register.html";
         }
@@ -32,5 +32,9 @@ public class ContextNavigation {
             return "/login.html";
         }
         throw new IllegalArgumentException("status = " + status);
+    }
+
+    public static String toLogin() {
+        return "/login.html";
     }
 }

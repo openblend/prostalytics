@@ -1,5 +1,7 @@
 package org.openblend.prostalytics.auth;
 
+import org.openblend.prostalytics.controller.Navigation;
+
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,18 +23,36 @@ import java.util.regex.Pattern;
 @WebFilter(filterName="AuthFilter")
 public class AuthFilter implements Filter {
 
+    private static final boolean AUTH_REQUIRED_BY_DEFAULT = false;
+
+    private static final boolean LOGIN_REDIRECTED_BY_DEFAULT = true;
+
     private static List<Pattern> securedResources = new LinkedList<Pattern>();
 
     private static List<Pattern> openResources = new LinkedList<Pattern>();
 
+    private static List<Pattern> loginRedirectedResources = new LinkedList<Pattern>();
+
+    private static List<Pattern> notLoginRedirectedResources = new LinkedList<Pattern>();
+
     static {
         securedResources.add(Pattern.compile("/rest/auth/.*"));
+        securedResources.add(Pattern.compile("/form.jsf"));
+        securedResources.add(Pattern.compile("/home.jsf"));
 
         openResources.add(Pattern.compile("/rest/auth/register"));
         openResources.add(Pattern.compile("/rest/auth/login"));
-        //openResources.add(Pattern.compile("/home.jsf"));
-        //openResources.add(Pattern.compile("/register.html"));
-        //openResources.add(Pattern.compile("/login.html"));
+/*
+        openResources.add(Pattern.compile("/home.jsf"));
+        openResources.add(Pattern.compile("/register.html"));
+        openResources.add(Pattern.compile("/login.html"));
+        openResources.add(Pattern.compile("/css/.*"));
+        openResources.add(Pattern.compile("/js/.*"));
+        openResources.add(Pattern.compile("/lib/.*"));
+        openResources.add(Pattern.compile("/images/.*"));
+        openResources.add(Pattern.compile("/partials/.*"));
+*/
+        notLoginRedirectedResources.add(Pattern.compile("/rest/.*"));
     }
 
     @Inject
@@ -49,7 +69,21 @@ public class AuthFilter implements Filter {
             if (p.matcher(path).matches())
                 return true;
         }
-        return false;
+        return AUTH_REQUIRED_BY_DEFAULT;
+    }
+
+    private boolean isLoginRedirected(HttpServletRequest req) {
+
+        String path = getRequestURI(req);
+        for (Pattern p: notLoginRedirectedResources) {
+            if (p.matcher(path).matches())
+                return false;
+        }
+        for (Pattern p: loginRedirectedResources) {
+            if (p.matcher(path).matches())
+                return true;
+        }
+        return LOGIN_REDIRECTED_BY_DEFAULT;
     }
 
     private String getRequestURI(HttpServletRequest req) {
@@ -68,7 +102,11 @@ public class AuthFilter implements Filter {
         }
 
         if (authManager.getUser() == null && isAuthRequired(req)) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            if (isLoginRedirected(req)) {
+                res.sendRedirect(Navigation.toLogin());
+            } else {
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
             return;
         }
 

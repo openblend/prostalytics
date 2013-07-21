@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;">
+]>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      >
+      ng-app="plytics">
 
 <ui:composition template="/layout/template.xhtml">
     <ui:param name="selectedMenuId" value="form-jsf" />
@@ -19,7 +21,7 @@
     <!--  start content-table-inner -->
     <div id="content-table-inner">
 
-    <table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl" ng-app="plytics">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" ng-controller="PatientFormCtrl">
         <tr valign="top">
         <td>
 

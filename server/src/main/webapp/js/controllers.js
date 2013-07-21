@@ -5,15 +5,16 @@ function UserCtrl($scope, User, $location) {
 }
 
 function LoginCtrl($scope, User, $location) {
+
     $scope.username = null;
     $scope.password = null;
-    
+    $scope.failed = false;
+
     $scope.login = function() {
-        $scope.failed = false;
 
         User.login($scope.username, $scope.password, function() {
-            $('#loginModal').modal('hide');
-            $location.path('/');
+            //$('#loginModal').modal('hide');
+            document.location.href='home.jsf';
         }, function() {
             $scope.failed = true;
         });
@@ -30,9 +31,10 @@ function RegisterCtrl($scope, User) {
         User.register($scope.u, function(response) {
             $scope.registered = true;
             $scope.u = {};
+            document.location.href = 'login.html';
         }, function(status) {
             $scope.failed = true;
-            $scope.failedMessage = status;
+            //$scope.failedMessage = status;
         });
     };
 }

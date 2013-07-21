@@ -3,29 +3,26 @@
 var plyticsServices = angular.module('plyticsServices', [ 'ngResource' ]);
 
 plyticsServices.service('User', function($resource, $http, $cookieStore) {
-    var registerRes = $resource('/rest/auth/register');
-    var loginRes = $resource('/rest/auth/login');
-    var logoutRes = $resource('/rest/auth/logout');
-    var userInfoRes = $resource('/rest/auth/userinfo');
+    var registerRes = $resource('rest/auth/register');
+    var loginRes = $resource('rest/auth/login');
+    var logoutRes = $resource('rest/auth/logout');
+    var userInfoRes = $resource('rest/auth/userinfo');
 
     var user = {
         username : null,
         password : null,
-        roles : null,
+        name : null,
+        lastName : null,
         loggedIn : false
     };
 
     var loadUserInfo = function(success) {
-        userInfoRes.get(function(userInfo) {
-            if (userInfo.userId) {
-                user.username = userInfo.userId;
-                user.name = userInfo.userId;
-
-                if (userInfo.fullName && userInfo.fullName != "null null") {
-                    user.name = userInfo.fullName.replace(/\ null$/g, '').replace(/^null\ /g, '');
-                }
-
-                user.roles = userInfo.roles;
+        userInfoRes.get(function(response) {
+            if (response.id) {
+                user.id = userInfo.id
+                user.username = userInfo.username;
+                user.name = userInfo.name;
+                user.lastName = userInfo.lastName;
                 user.loggedIn = true;
 
                 if (success) {
@@ -41,10 +38,10 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
         user.username = username;
         user.password = password;
         loginRes.save({
-            userId : user.username,
+            username : user.username,
             password : user.password
         }, function(response) {
-            if (response.loggedIn) {
+            if (response.id) {
                 localStorage.setItem("logged-in", "true");
 
                 loadUserInfo(success);
@@ -61,12 +58,12 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
 
         localStorage.removeItem("logged-in");
 
-        logoutRes.get();
+        logoutRes.save({}, success, error);
     };
 
     user.register = function(user, success, error) {
         registerRes.save(user, function(response) {
-            if (response.registered) {
+            if (response.id) {
                 success();
             } else {
                 error(response.status);

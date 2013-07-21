@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -157,7 +158,25 @@ public class AuthEndpoint {
             return res.build();
 
         } catch (Throwable e) {
-            e.printStackTrace();
+            e.printStackTrace();  // TODO :)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.toString()).build();
+        }
+    }
+
+    /**
+     * Return info for currently logged-in user
+     *
+     * @return User
+     */
+    @Path("/userinfo")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserInfo() {
+        try {
+            User user = auth.getUser();
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (Throwable e) {
+            e.printStackTrace();  // TODO :)
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.toString()).build();
         }
     }

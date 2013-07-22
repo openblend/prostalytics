@@ -31,6 +31,6 @@ Ignore “HQ224054: Failed to broadcast connector configs” errors.
 
 8) copy the built artifact to deployment folder:
 
-    cp server/target/prostalytics-server-1.0.0-SNAPSHOT.war /opt/CapeDwarf_AS7_1.0.0.Beta4/standalone/deployments/
+    cp server/target/prostalytics.war /opt/CapeDwarf_AS7_1.0.0.Beta4/standalone/deployments/
 
-9) Visit: [http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/browse.jsf](http://localhost:8080/prostalytics-server-1.0.0-SNAPSHOT/browse.jsf)
+9) Visit: [http://localhost:8080/prostalytics/browse.jsf](http://localhost:8080/prostalytics/browse.jsf)

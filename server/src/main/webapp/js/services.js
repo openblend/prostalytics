@@ -17,8 +17,8 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
     };
 
     var loadUserInfo = function(success) {
-        userInfoRes.get(function(response) {
-            if (response.id) {
+        userInfoRes.get(function(userInfo) {
+            if (userInfo.id) {
                 user.id = userInfo.id
                 user.username = userInfo.username;
                 user.name = userInfo.name;

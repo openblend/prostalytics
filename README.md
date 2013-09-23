@@ -9,7 +9,7 @@ Building and installing
 
 1) Visit [CapeDwarf Downloads page](http://www.jboss.org/capedwarf/downloads) and download latest release bundle
 
-2) Unpack the zip archve
+2) Unpack the zip archive
 
 3) Open console and cd to the unzipped firectory:
 

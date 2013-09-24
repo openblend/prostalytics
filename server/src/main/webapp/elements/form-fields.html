@@ -1,0 +1,17 @@
+<label for="{{field.label}}" class="col-lg-2 control-label">{{field.label}}</label>
+<div class="col-lg-10" ng-switch on="field.type">
+    <input ng-switch-when="date" type="text" class="form-control" ng-model="field.object[field.prop]" datepicker name="fieldName" ng-required="field.required" />
+    <div ng-switch-when="radio">
+        <div class="col-lg-10">
+            <div class="radio" id="{{field.label}}" ng-repeat="option in field.options">
+                <label>
+                    <input type="radio" ng-model="field.object[field.prop]" ng-value="option.value" name="fieldName" ng-required="field.required">
+                    {{option.label}}
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- text,number -->
+    <input ng-switch-default type="{{field.type}}" id="{{field.label}}" name="fieldName" class="form-control" ng-model="field.object[field.prop]" ng-required="field.required"/>
+</div>

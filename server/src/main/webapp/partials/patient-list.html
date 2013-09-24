@@ -1,0 +1,34 @@
+<div class="container">
+    <!-- div class="span2">
+      Search: <input ng-model="query">
+      Sort by:
+      <select ng-model="orderProp">
+        <option value="name">Alphabetical</option>
+        <option value="age">Newest</option>
+      </select>
+
+    </div-->
+
+    <div class="bs-example">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Last name</th>
+                    <th>First name</th>
+                    <th>Birth date</th>
+                    <th>External ID</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="patient in patients | filter:query | orderBy:orderProp">
+             <tr>
+                 <td><a href="#/patients/{{patient.code}}">{{patient.code}}</a></td>
+                 <td>{{patient.surname}}</td>
+                 <td>{{patient.name}}</td>
+                 <td>{{patient.birthDate}}</td>
+                 <td>{{patient.externalId}}</td>
+             </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -39,63 +39,46 @@ function RegisterCtrl($scope, User) {
     };
 }
 
-function PatientFormCtrl($scope, $http) {
-    var id = getURLParameter('id');
+function PatientListCtrl($scope, $http) {
+    $http.get('rest-mock/patients.json').success(function(data) {
+        $scope.patients = data;
+    });
+    //$scope.orderProp = 'age';
+}
 
-    if (id != null) {
-        /*$http.get('rest-mock/patient-' + id + '.json').success(function(data) {
-         $scope.patient = data;
-         });*/
-        $.ajax({
-            //async: false,
-            dataType: "json",
-            url: 'rest/patient/' + id,
-            success: (function(data) {
-                $scope.patient = data;
-            })
-        });
-    }
+function PatientDetailCtrl($scope, $routeParams, $http) {
+    $scope.patient = new Object();
+    $scope.patientId = $routeParams.patientId;
+    $http.get('rest-mock/patient-' + $routeParams.patientId + '.json').success(function(data) {
+        $scope.patient = data;
+        patientFormData($scope);
+    });
 
-    $scope.postFormData = function(form) {
-        form.submitted = true;
-        if (form.$valid) {
-            alert("posting: " + angular.toJson($scope.patient));
-            $http({
-                method: 'POST',
-                url: 'rest/patient/',
-                data: angular.toJson($scope.patient),
-                headers: {'Content-Type': 'application/json'}
-            });
-            /*$.ajax({
-             type: "POST",
-             url: '/rest/patient/',
-             data: data,
-             success: success,
-             dataType: dataType
-             });*/
-        } else {
-            alert("incomplete");
-        }
+    $scope.selectOptions = new Object();
+    $scope.selectOptions.positiveNegativeWithZero = [
+        {value: "no", label: "no"},
+        {value: "positive", label: "positive"},
+        {value: "negative", label: "negative"}
+    ];
+    
+    $scope.update = function(patient) {
+        alert(JSON.stringify(patient));
     };
+}
 
-    $scope.validateField = function(form, field) {
-        //return (!field.$valid && (field.$dirty || form.submitted))
-        return (!field.$valid )
-    };
+function patientFormData($scope) {
+    $scope.formDefs = new Object();
 
-    /* $scope.dateOptions = {
-     dateFormat: "yy-mm-dd"
-     };*/
+    $scope.formDefs.personalData = [
+        {type: "text", object: $scope.patient, prop: "surname", required: true, label: "Surname"},
+        {type: "text", object: $scope.patient, prop: "name", required: true, label: "Name"},
+        {type: "date", object: $scope.patient, prop: "birthDate", required: true, label: "Birth date"},
+        {type: "text", object: $scope.patient, prop: "externalId", required: true, label: "External ID"}
+    ];
 
-    $scope.activeTab = 'personal';
-    $scope.switchTab = function(tabName, valid) {
-        if(valid) {
-            $scope.activeTab = tabName;
-        } else {
-            alert("invalid form");
-        }
-    }
-
-    // TODO: what's that good for?
-    window.scope = $scope;
+    $scope.formDefs.rrpBase = [
+        {type: "date", object: $scope.patient, prop: "trusDate", required: true, label: "Trus date"},
+        {type: "number", object: $scope.patient, prop: "trusPsaBx", required: true, label: "Trus PSA by BX"},
+        {type: "radio", object: $scope.patient, prop: "trusDre", required: true, label: "Trus DRE", options: $scope.selectOptions.positiveNegativeWithZero},
+    ];
 }

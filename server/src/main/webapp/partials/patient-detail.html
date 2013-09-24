@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="col-lg-6">
+        <div class="well">
+            <form class="bs-example form-horizontal css-form" name="patientForm" novalidate>
+                <fieldset>
+                    <legend>#{{patient.code}}</legend>
+                    
+                    <div onclick="$('#personalData').toggle( 'slow');" style="cursor: pointer;" ng-class="{'alert-danger': outerFormPersonalData.$invalid}">+/- Personal Data</div>
+                    <div id="personalData" ng-form="outerFormPersonalData" style="display: none;">
+                     <div ng-repeat="field in formDefs.personalData" ng-form="formPersonalData">
+                      <div class="form-group" ng-class="{'has-error': formPersonalData.fieldName.$invalid}">
+                        <ng-include src="'elements/form-fields.html'" />
+                      </div>
+                     </div>
+                    </div>
+
+                    <div onclick="$('#rrp-base').toggle( 'slow');" style="cursor: pointer;" ng-class="{'alert-danger': outerFormRrpBase.$invalid}">+/- RRP base</div>
+                    <div id="rrp-base" ng-form="outerFormRrpBase">
+                     <div ng-repeat="field in formDefs.rrpBase" ng-form="formRrpBase">
+                      <div class="form-group" ng-class="{'has-error': formRrpBase.fieldName.$invalid}">
+                          <ng-include src="'elements/form-fields.html'" />
+                      </div>
+                     </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button class="btn btn-default">Cancel</button>
+                            <button class="btn btn-primary"
+                                 ng-click="update(patient)"
+                                 ng-disabled="patientForm.$invalid">
+                                Submit
+                            </button>
+                            
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

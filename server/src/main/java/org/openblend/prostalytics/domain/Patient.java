@@ -20,6 +20,7 @@ public class Patient implements Serializable {
     public static final String EXTERNAL_ID = "externalId";
 
     private long id;
+
     private String code;
     private String name;
     private String surname;

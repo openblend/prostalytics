@@ -22,7 +22,7 @@
             </thead>
             <tbody ng-repeat="patient in patients | filter:query | orderBy:orderProp">
              <tr>
-                 <td><a href="#/patients/{{patient.code}}">{{patient.code}}</a></td>
+                 <td><a href="#/patient/{{patient.id}}">{{patient.code}}</a></td>
                  <td>{{patient.surname}}</td>
                  <td>{{patient.name}}</td>
                  <td>{{patient.birthDate}}</td>

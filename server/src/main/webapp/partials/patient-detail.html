@@ -6,7 +6,7 @@
                     <legend>#{{patient.code}}</legend>
                     
                     <div onclick="$('#personalData').toggle( 'slow');" style="cursor: pointer;" ng-class="{'alert-danger': outerFormPersonalData.$invalid}">+/- Personal Data</div>
-                    <div id="personalData" ng-form="outerFormPersonalData" style="display: none;">
+                    <div id="personalData" ng-form="outerFormPersonalData" ng-show="outerFormPersonalData.$invalid">
                      <div ng-repeat="field in formDefs.personalData" ng-form="formPersonalData">
                       <div class="form-group" ng-class="{'has-error': formPersonalData.fieldName.$invalid}">
                         <ng-include src="'elements/form-fields.html'" />
@@ -25,11 +25,14 @@
 
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button class="btn btn-default">Cancel</button>
+                            <button class="btn btn-default"
+                                    ng-click="cancel()">
+                                Cancel
+                            </button>
                             <button class="btn btn-primary"
-                                 ng-click="update(patient)"
-                                 ng-disabled="patientForm.$invalid">
-                                Submit
+                                    ng-click="update()"
+                                    ng-disabled="patientForm.$invalid">
+                                Save
                             </button>
                             
                         </div>

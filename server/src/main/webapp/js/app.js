@@ -16,7 +16,7 @@ plyticsModule.config([ '$routeProvider', function($routeProvider) {
     }).when('/patients', {
     	templateUrl: 'partials/patient-list.html',   
     	controller: PatientListCtrl
-	}).when('/patients/:patientId', {
+	}).when('/patient/:patientId', {
 		templateUrl: 'partials/patient-detail.html', 
 		controller: PatientDetailCtrl
     }).otherwise({
@@ -78,7 +78,7 @@ plyticsModule.directive('datepicker', function() {
         link : function (scope, element, attrs, ngModelCtrl) {
             $(function(){
                 element.datepicker({
-                    dateFormat:'dd.mm.yy',
+                    dateFormat:'yy-mm-dd',
                     onSelect:function (date) {
                         ngModelCtrl.$setViewValue(date);
                         scope.$apply();

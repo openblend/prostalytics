@@ -40,6 +40,8 @@ function RegisterCtrl($scope, User) {
             //$scope.failedMessage = status;
         });
     };
+    
+    registerFormData($scope);
 }
 
 function PatientListCtrl($scope, $routeParams, $resource) {
@@ -90,6 +92,18 @@ function patientFormData($scope) {
 //        {type: "number", object: $scope.patient, prop: "trusPsaBx", required: true, label: "Trus PSA by BX"},
 //        {type: "radio", object: $scope.patient, prop: "trusDre", required: true, label: "Trus DRE", options: selectOptions.positiveNegativeWithZero},
 //    ];
+}
+
+function registerFormData($scope) {
+    $scope.formDefs = new Object();
+
+    $scope.formDefs.register = [
+        {type: "text", object: $scope.u, prop: "username", required: true, label: "Username"},
+        {type: "email", object: $scope.u, prop: "email", required: true, label: "Email"},
+        {type: "text", object: $scope.u, prop: "name", required: true, label: "Name"},
+        {type: "text", object: $scope.u, prop: "lastName", required: true, label: "Last name"},
+        {type: "password", object: $scope.u, prop: "password", required: true, label: "Password"}
+    ];
 }
 
 function initFormConstants(selectOptions) {

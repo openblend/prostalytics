@@ -1,48 +1,28 @@
-<div class="col-lg-6" ng-controller="RegisterCtrl">
+<div class="container" ng-controller="RegisterCtrl">
+    <div class="col-lg-6">
+        <div class="well">
+            <form class="bs-example form-horizontal css-form" name="registerForm" novalidate ng-submit="register()">
+                <fieldset>
+                    <legend>Register</legend>
+                    
+                    <div ng-repeat="field in formDefs.register" ng-form="registerFormInner">
+                        <div class="form-group" ng-class="{'has-error': registerFormInner.fieldName.$invalid}">
+                            <ng-include src="'elements/form-fields.html'" />
+                        </div>
+                    </div>
 
-    <form class="form-horizontal" ng-submit="register()">
-        <fieldset>
-            <legend>Register</legend>
-            <div class="form-group">
-                <label for="username" class="col-lg-2 control-label">Username</label>
-                <div class="col-lg-10">
-                    <input type="text" class="form-control" id="username" ng-model="u.username">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-10">
-                    <input type="password" class="form-control"
-                        placeholder="Password" ng-model="password">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    ng-disabled="registerForm.$invalid">
+                                Register
+                            </button>
+                            
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
 </div>
-
-                  <th><label for="username">Username</label></th>
-                  <td><input type="text" id="username" name="username" class="register-inp" ng-model="u.username" /></td>
-               </tr>
-               <tr>
-                  <th><label for="email">E-mail</label></th>
-                  <td><input type="text" id="email" name="email" class="register-inp" ng-model="u.email"/></td>
-               </tr>
-               <tr>
-                  <th><label for="name">Name</label></th>
-                  <td><input type="text" id="name" name="name" class="register-inp" ng-model="u.name"/></td>
-               </tr>
-               <tr>
-                  <th><label for="lastname">Last Name</label></th>
-                  <td><input type="text" id="lastname" name="lastname" class="register-inp" ng-model="u.lastName"/></td>
-               </tr>
-               <tr>
-                  <th><label for="password">Password</label></th>
-                  <td><input type="password" id="password" name="password" onfocus="this.value=''" class="register-inp" ng-model="u.password"/></td>
-               </tr>
-               <tr>
-                  <th></th>
-                  <td><input type="submit" value="Register" class="submit-register"  /></td>

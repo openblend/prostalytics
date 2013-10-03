@@ -1,0 +1,11 @@
+{
+    "endpoints": {
+        "appinfo": "/rest/appinfo",
+        "register": "/rest/auth/register",
+        "login": "/rest/auth/login",
+        "logout": "/rest/auth/login",
+        "userinfo": "/rest/auth/userinfo",
+        "patient": "/rest/patient",
+        "find-patient": "/rest/patient/find"
+    }
+}

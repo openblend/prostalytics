@@ -2,19 +2,25 @@
 
 var plyticsServices = angular.module('plyticsServices', [ 'ngResource' ]);
 
-plyticsServices.service('User', function($resource, $http, $cookieStore) {
+plyticsServices.service('User', function($resource, $http, $cookieStore, $window) {
     var registerRes = $resource('rest/auth/register');
     var loginRes = $resource('rest/auth/login');
     var logoutRes = $resource('rest/auth/logout');
     var userInfoRes = $resource('rest/auth/userinfo');
 
-    var user = {
-        username : null,
-        password : null,
-        name : null,
-        lastName : null,
-        loggedIn : false
+    var user = {};
+
+    var initUser = function() {
+        user.username = null;
+        user.password = null;
+        user.name = null;
+        user.lastName = null;
+        user.loggedIn = false;
+        user.admin = false;
     };
+
+    initUser();
+
 
     var loadUserInfo = function(success) {
         userInfoRes.get(function(userInfo) {
@@ -24,7 +30,7 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
                 user.name = userInfo.name;
                 user.lastName = userInfo.lastName;
                 user.loggedIn = true;
-
+                user.admin = userInfo.admin;
                 if (success) {
                     success();
                 }
@@ -52,13 +58,14 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
     };
 
     user.logout = function() {
-        user.username = null;
-        user.password = null;
-        user.loggedIn = false;
-
+        initUser();
         localStorage.removeItem("logged-in");
 
-        logoutRes.save({}, success, error);
+        logoutRes.save({}, function() {
+            $window.location.href = "#/";
+        }, function(e) {
+            console.log("Failed to log out!");
+        });
     };
 
     user.register = function(user, success, error) {
@@ -76,4 +83,30 @@ plyticsServices.service('User', function($resource, $http, $cookieStore) {
     }
 
     return user;
+});
+
+
+plyticsServices.service('App', function($resource, $window) {
+    var appInfoRes = $resource('rest/appinfo');
+
+    var appInfo = {
+        isSetUp : true
+    };
+
+    appInfo.loadInfo = function() {
+        appInfoRes.get(function(result) {
+            if (result.setUp != null) {
+                appInfo.isSetUp = result.setUp;
+            }
+
+            if (!appInfo.isSetUp) {
+                $window.location.href = "#/register";
+            }
+        }, function(e) {
+            console.log("Failed to load appinfo");
+        });
+    };
+
+    appInfo.loadInfo();
+    return appInfo;
 });

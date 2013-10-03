@@ -26,6 +26,7 @@ public class User implements Serializable {
     public static final String NAME = "name";
     public static final String LAST_NAME = "lastName";
     public static final String PASSWORD = "password";
+    public static final String IS_ADMIN = "isAdmin";
 
 
     private long id = -1;
@@ -33,6 +34,7 @@ public class User implements Serializable {
     private String email;
     private String name;
     private String lastName;
+    private boolean isAdmin;
 
     // password should always be hashed
     private String password;
@@ -50,6 +52,8 @@ public class User implements Serializable {
         u.name = (String) entity.getProperty(NAME);
         u.lastName = (String) entity.getProperty(LAST_NAME);
         u.password = (String) entity.getProperty(PASSWORD);
+        Boolean val = (Boolean) entity.getProperty(IS_ADMIN);
+        u.isAdmin = val != null && val;
         return u;
     }
 
@@ -60,6 +64,7 @@ public class User implements Serializable {
         e.setProperty(NAME, name);
         e.setProperty(LAST_NAME, lastName);
         e.setProperty(PASSWORD, password);
+        e.setProperty(IS_ADMIN, isAdmin);
         return e;
     }
 
@@ -109,5 +114,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

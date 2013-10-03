@@ -42,7 +42,7 @@ public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
                 //generate code for new inserts
                 String code = patient.getCode();
                 if (code == null || "".equals(code)){
-                    pEntitiy.setProperty(Patient.CODE, randomString(5));;
+                    pEntitiy.setProperty(Patient.CODE, randomString(5));
                 }
                 return ds.put(pEntitiy).getId();
             }
@@ -79,8 +79,10 @@ public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
         if (notEmpty(surname)) filters.add(new Query.FilterPredicate(Patient.SURNAME, Query.FilterOperator.EQUAL, surname));
         if (notEmpty(externalId)) filters.add(new Query.FilterPredicate(Patient.EXTERNAL_ID, Query.FilterOperator.EQUAL, externalId));
 
-        if (filters.size() > 0) {
+        if (filters.size() > 1) {
             query.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, filters));
+        } else if (filters.size() > 0) {
+            query.setFilter(filters.get(0));
         }
 
         PreparedQuery pq = ds.prepare(query);

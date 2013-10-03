@@ -39,6 +39,11 @@ public class SessionAuthManagerImpl extends ProtectedContext implements AuthMana
         return null;
     }
 
+    @Override
+    public void logout() {
+        getSession().invalidate();
+    }
+
     private HttpSession getSession() {
         HttpServletRequest req = ProtectedContext.getCurrentRequest();
         if (req == null) {

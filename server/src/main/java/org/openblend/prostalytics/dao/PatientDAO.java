@@ -18,18 +18,30 @@ import org.openblend.prostalytics.domain.Patient;
 @Path("/patient")
 public interface PatientDAO {
 
+    /*
+     * curl -XPOST -d "{\"code\":\"39458\",\"name\":\"John\",\"surname\":\"Doe\",\"externalId\":\"123\",\"birthDate\":\"1990-08-01T23:14:00.000Z\"}" -H "Content-Type: application/json" -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" -H "Accept: application/json" http://localhost:8080/prostalytics/rest/patient
+     */
 	@POST
 	@Path("/")
 	public long savePatient(Patient patient);
 
+    /*
+     * curl -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" -H "Accept: application/json"  http://localhost:8080/prostalytics/rest/patient/1
+     */
     @GET
     @Path("/{id}")
     public Patient loadPatient(@PathParam("id") long id);
-    
+
+    /*
+    * curl -XDELETE -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" http://localhost:8080/prostalytics/rest/patient/1
+    */
     @DELETE
     @Path("/{id}")
     public void deletePatient(@PathParam("id") long id);
 
+    /*
+     * curl -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" -H "Accept: application/json" "http://localhost:8080/prostalytics/rest/patient/find?name=John&surname=Doe"
+     */
     @GET
     @Path("/find")
     public List<Patient> findPatients(@QueryParam("code") String code, @QueryParam("name") String name, @QueryParam("surname") String surname, @QueryParam("externalId") String externalId);

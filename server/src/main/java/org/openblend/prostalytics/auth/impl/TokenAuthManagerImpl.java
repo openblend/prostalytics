@@ -16,6 +16,7 @@ import java.util.UUID;
 public class TokenAuthManagerImpl implements AuthManager {
 
     private static final ThreadLocal<User> tlu = new ThreadLocal<User>();
+    private static final ThreadLocal<String> tlt = new ThreadLocal<String>();
 
     @Inject
     private AuthDAO dao;
@@ -25,6 +26,7 @@ public class TokenAuthManagerImpl implements AuthManager {
         User u = dao.findUserByToken(token);
         if (u != null) {
             tlu.set(u);
+            tlt.set(token);
         }
         return u;
     }
@@ -46,6 +48,13 @@ public class TokenAuthManagerImpl implements AuthManager {
         user.setPassword(null);
         tlu.set(user);
         return token == null ? null : token.getToken();
+    }
+
+    @Override
+    public void logout() {
+        String token = tlt.get();
+        if (token != null)
+            dao.invalidateToken(token);
     }
 
     private String generateToken() {

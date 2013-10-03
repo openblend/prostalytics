@@ -8,9 +8,13 @@ import org.openblend.prostalytics.auth.domain.User;
  */
 public interface AuthDAO {
 
+    User findAdmin();
+
     User findUserByToken(String token);
 
     Token updateOrCreateToken(User user, String oldToken);
+
+    void invalidateToken(String token);
 
     User authenticate(String username, String passwordHash);
 }

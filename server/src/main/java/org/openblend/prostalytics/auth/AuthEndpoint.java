@@ -163,7 +163,17 @@ public class AuthEndpoint {
         }
     }
 
+
+    @Path("logout")
+    @POST
+    public void logout() {
+        auth.logout();
+    }
+
+
     /**
+     * curl -H "Cookie: JSESSIONID=1sCIT64Lwp0m2xq77uRVEQBF" -H "Accept: application/json" http://localhost:8080/prostalytics/rest/auth/userinfo
+     *
      * Return info for currently logged-in user
      *
      * @return User

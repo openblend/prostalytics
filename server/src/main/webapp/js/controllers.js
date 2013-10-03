@@ -3,6 +3,45 @@
 var selectOptions = new Object();
 initFormConstants(selectOptions);
 
+function AppInfoCtrl($scope, App, User, $location, $window) {
+    $scope.appInfo = App;
+
+    $scope.navList = [
+        { url: '/', title: 'Home'},
+        { url: '/patients', title: 'Browse'},
+        { url: '/patient/0', title: 'Add'}
+    ];
+
+    function detectRoute() {
+        angular.forEach($scope.navList, function(item) {
+            console.log("$location.path(): " + $location.path() + ", item.url: " + item.url
+                + ", match? " + ($location.path().match(new RegExp(item.url))));
+            item.active = $location.path() === item.url;
+            console.log("   item.active: " + item.active);
+        });
+    }
+
+    $scope.$on('$routeChangeSuccess', detectRoute);
+
+    $scope.$on('$routeChangeStart', function(event, next, current) {
+        if (next.redirectTo === "/login" || next.redirectTo === "/register")
+            return;
+
+        // check appinfo if app has been set up
+        // if not redirect to register
+        if (!$scope.appInfo.isSetUp) {
+            setTimeout(function() {$window.location.href='#/register'}, 1);
+            return;
+        }
+
+        // check if user has been logged in
+        if (!User.loggedIn) {
+            // if not redirect to login form
+            setTimeout(function() {$window.location.href='#/login'}, 1);
+        }
+    });
+}
+
 function UserCtrl($scope, User, $location) {
     $scope.user = User;
 }
@@ -24,16 +63,22 @@ function LoginCtrl($scope, User, $location) {
     };
 }
 
-function RegisterCtrl($scope, User) {
+function RegisterCtrl($scope, User, App) {
     $scope.u = {};
 
     $scope.register = function() {
         $scope.registered = false;
         $scope.failed = false;
 
+        // set admin flag if this is first user registration
+        if (!App.isSetUp) {
+           $scope.u.admin = true;
+        }
+
         User.register($scope.u, function(response) {
             $scope.registered = true;
             $scope.u = {};
+            App.loadInfo();
             document.location.href = '#/login';
         }, function(status) {
             $scope.failed = true;

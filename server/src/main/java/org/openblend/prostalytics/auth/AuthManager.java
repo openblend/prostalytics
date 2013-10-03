@@ -14,4 +14,6 @@ public interface AuthManager {
     User getUser();
 
     String loggedIn(User user, String oldToken);
+
+    void logout();
 }

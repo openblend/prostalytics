@@ -16,5 +16,5 @@ public interface AuthDAO {
 
     void invalidateToken(String token);
 
-    User authenticate(String username, String passwordHash);
+    User authenticate(String email, String passwordHash);
 }

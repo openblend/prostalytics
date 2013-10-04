@@ -48,13 +48,13 @@ function UserCtrl($scope, User, $location) {
 
 function LoginCtrl($scope, User, $location) {
 	//TODO client side login check http://blog.brunoscopelliti.com/deal-with-users-authentication-in-an-angularjs-web-app
-    $scope.username = null;
+    $scope.email = null;
     $scope.password = null;
     $scope.failed = false;
 
     $scope.login = function() {
 
-        User.login($scope.username, $scope.password, function() {
+        User.login($scope.email, $scope.password, function() {
             //$('#loginModal').modal('hide');
             document.location.href='#/patients';
         }, function() {
@@ -63,7 +63,7 @@ function LoginCtrl($scope, User, $location) {
     };
 }
 
-function RegisterCtrl($scope, User, App) {
+function RegisterCtrl($scope, User, App, $window) {
     $scope.u = {};
 
     $scope.register = function() {
@@ -78,8 +78,11 @@ function RegisterCtrl($scope, User, App) {
         User.register($scope.u, function(response) {
             $scope.registered = true;
             $scope.u = {};
-            App.loadInfo();
-            document.location.href = '#/login';
+            if (!App.isSetUp) {
+                App.checkSetup(function() {
+                    $window.location.href = "#/login";
+                });
+            }
         }, function(status) {
             $scope.failed = true;
             //$scope.failedMessage = status;
@@ -143,7 +146,6 @@ function registerFormData($scope) {
     $scope.formDefs = new Object();
 
     $scope.formDefs.register = [
-        {type: "text", object: $scope.u, prop: "username", required: true, label: "Username"},
         {type: "email", object: $scope.u, prop: "email", required: true, label: "Email"},
         {type: "text", object: $scope.u, prop: "name", required: true, label: "Name"},
         {type: "text", object: $scope.u, prop: "lastName", required: true, label: "Last name"},

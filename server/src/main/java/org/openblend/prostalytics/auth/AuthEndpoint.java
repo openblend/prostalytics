@@ -45,20 +45,19 @@ public class AuthEndpoint {
     private AuthManager auth;
 
     /*
-    * curl --data "username=test2&name=Test&lastname=Tester&email=yourmail@gmail.com&password=test" http://localhost:8080/prostalytics/rest/auth/register
+    * curl --data "name=Test&lastname=Tester&email=yourmail@gmail.com&password=test" http://localhost:8080/prostalytics/rest/auth/register
     *
     */
     @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public Response register(@FormParam("username") String username,
+    public Response register(
             @FormParam("email") String email, @FormParam("name") String name, @FormParam("lastname") String lastName,
             @FormParam("password") String password) throws URISyntaxException {
 
         try {
             User user = new User();
-            user.setUsername(username);
             user.setName(name);
             user.setLastname(lastName);
             user.setEmail(email);
@@ -78,7 +77,7 @@ public class AuthEndpoint {
 
 
     /*
-     * curl --data '{"username":"test2","name":"Test","lastname":"Tester","email":"yourmail@gmail.com","password":"test"}' http://localhost:8080/prostalytics/rest/auth/register --header "Content-Type:application/json"
+     * curl --data '{"name":"Test","lastname":"Tester","email":"yourmail@gmail.com","password":"test"}' http://localhost:8080/prostalytics/rest/auth/register --header "Content-Type:application/json"
      *
      */
     @Path("/register")
@@ -103,19 +102,19 @@ public class AuthEndpoint {
     }
 
     /*
-     * curl --data "username=test2&password=test" http://localhost:8080/prostalytics/rest/auth/login
+     * curl --data "email=yourmail@gmail.com&password=test" http://localhost:8080/prostalytics/rest/auth/login
      *
      */
     @Path("/login")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public Response login(@FormParam("username") String username,
+    public Response login(@FormParam("email") String email,
                           @FormParam("password") String password, @HeaderParam("Auth-Token") String token) throws URISyntaxException {
 
         String newToken = null;
         try {
-            User user = dao.authenticate(username, hashPassword(password));
+            User user = dao.authenticate(email, hashPassword(password));
             if (user != null) {
                 newToken = auth.loggedIn(user, token);
             }

@@ -11,7 +11,6 @@ plyticsServices.service('User', function($resource, $http, $cookieStore, $window
     var user = {};
 
     var initUser = function() {
-        user.username = null;
         user.password = null;
         user.name = null;
         user.lastName = null;
@@ -26,7 +25,6 @@ plyticsServices.service('User', function($resource, $http, $cookieStore, $window
         userInfoRes.get(function(userInfo) {
             if (userInfo.id) {
                 user.id = userInfo.id
-                user.username = userInfo.username;
                 user.name = userInfo.name;
                 user.lastName = userInfo.lastName;
                 user.loggedIn = true;
@@ -40,11 +38,11 @@ plyticsServices.service('User', function($resource, $http, $cookieStore, $window
         });
     };
 
-    user.login = function(username, password, success, error) {
-        user.username = username;
+    user.login = function(email, password, success, error) {
+        user.email = email;
         user.password = password;
         loginRes.save({
-            username : user.username,
+            email : user.email,
             password : user.password
         }, function(response) {
             if (response.id) {
@@ -90,23 +88,37 @@ plyticsServices.service('App', function($resource, $window) {
     var appInfoRes = $resource('rest/appinfo');
 
     var appInfo = {
-        isSetUp : true
+        isSetUp : true,
+        setupChecked: false
     };
 
-    appInfo.loadInfo = function() {
+    appInfo.checkSetup = function(success) {
+        if (appInfo.setUpChecked && appInfo.isSetUp) {
+            // do nothing
+            if (success)
+                success();
+            return;
+        }
+
         appInfoRes.get(function(result) {
             if (result.setUp != null) {
+                appInfo.setUpChecked = true;
                 appInfo.isSetUp = result.setUp;
+            } else {
+                console.log("/appinfo result contains no field 'setUp'");
             }
 
-            if (!appInfo.isSetUp) {
-                $window.location.href = "#/register";
-            }
+            if (success)
+                success();
         }, function(e) {
             console.log("Failed to load appinfo");
         });
     };
 
-    appInfo.loadInfo();
+    appInfo.checkSetup(function() {
+        if (!appInfo.isSetUp) {
+            $window.location.href = "#/register";
+        }
+    });
     return appInfo;
 });

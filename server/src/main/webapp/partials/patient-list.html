@@ -25,7 +25,7 @@
                  <td><a href="#/patient/{{patient.id}}">{{patient.code}}</a></td>
                  <td>{{patient.surname}}</td>
                  <td>{{patient.name}}</td>
-                 <td>{{patient.birthDate}}</td>
+                 <td>{{patient.birthDate|date:'yyyy-MM-dd'}}</td>
                  <td>{{patient.externalId}}</td>
              </tr>
             </tbody>

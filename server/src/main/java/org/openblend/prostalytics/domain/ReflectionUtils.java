@@ -1,6 +1,5 @@
 package org.openblend.prostalytics.domain;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,34 +55,20 @@ public class ReflectionUtils {
         }
     }
 
-    protected static void toEntity(PersistentEntity target, Entity entity, Class<?> current) throws Exception {
-        if (current == Object.class) {
-            return;
-        }
+    protected static void toEntity(PersistentEntity target, Entity entity, Class<? extends PersistentEntity> current) throws Exception {
+        MetaModel mm = MetaModel.createMetaModel(current);
 
-        for (Field field : current.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Ignore.class)) {
-                continue;
-            }
-            field.setAccessible(true);
+        for (PersistentField field : mm.getFields()) {
             Object value = field.get(target);
             if (value == null) {
                 continue;
             }
-
-            if (field.isAnnotationPresent(Parent.class)) {
-                value = saveParent(value);
-            } else if (field.isAnnotationPresent(Children.class)) {
-                value = saveChildren(value);
-            }
-
+            value = field.saveValue(value);
             entity.setProperty(field.getName(), value);
         }
-
-        toEntity(target, entity, current.getSuperclass());
     }
 
-    protected static Object saveParent(Object parent) {
+    static Object saveParent(Object parent) {
         if (parent instanceof PersistentEntity == false) {
             throw new IllegalArgumentException("Parent should be instance of PersistentEntity: " + parent);
         }
@@ -98,7 +83,7 @@ public class ReflectionUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Object saveChildren(Object value) {
+    static Object saveChildren(Object value) {
         if (value instanceof Iterable == false) {
             throw new IllegalArgumentException("Children should be instance of Iterable: " + value);
         }
@@ -116,46 +101,20 @@ public class ReflectionUtils {
     }
 
     @SuppressWarnings("unchecked")
-    protected static void fromEntity(PersistentEntity target, Entity entity, Class<?> current) throws Exception {
-        if (current == Object.class) {
-            return;
-        }
+    protected static void fromEntity(PersistentEntity target, Entity entity, Class<? extends PersistentEntity> current) throws Exception {
+        MetaModel mm = MetaModel.createMetaModel(current);
 
-        for (Field field : current.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Ignore.class)) {
-                continue;
-            }
-            field.setAccessible(true);
-
+        for (PersistentField field : mm.getFields()) {
             Object value = entity.getProperty(field.getName());
             if (value == null) {
                 continue;
             }
-
-            if (field.isAnnotationPresent(Parent.class)) {
-                Class<?> clazz = field.getAnnotation(Parent.class).value();
-                if (clazz == void.class) {
-                    clazz = field.getType();
-                }
-                if (clazz.isAssignableFrom(PersistentEntity.class) == false) {
-                    throw new IllegalArgumentException("Parent class should be instance of PersistentEntity: " + clazz.getName());
-                }
-                Class<? extends PersistentEntity> targetClass = (Class<? extends PersistentEntity>) clazz;
-                value = loadParent(targetClass, value);
-            } else if (field.isAnnotationPresent(Children.class)) {
-                Children children = field.getAnnotation(Children.class);
-                Class<? extends PersistentEntity> targetClass = children.value();
-                Class<? extends Collection> collectionClass = children.collection();
-                value = loadChildren(targetClass, collectionClass, value);
-            }
-
+            value = field.loadValue(value);
             field.set(target, value);
         }
-
-        fromEntity(target, entity, current.getSuperclass());
     }
 
-    protected static Object loadParent(Class<? extends PersistentEntity> targetClass, Object value) throws Exception {
+    static Object loadParent(Class<? extends PersistentEntity> targetClass, Object value) throws Exception {
         if (value instanceof Key == false) {
             throw new IllegalArgumentException("Parent should be saved as Key: " + value);
         }
@@ -165,7 +124,7 @@ public class ReflectionUtils {
     }
 
     @SuppressWarnings("unchecked")
-    protected static Object loadChildren(Class<? extends PersistentEntity> targetClass, Class<? extends Collection> collectionClass, Object value) throws Exception {
+    static Object loadChildren(Class<? extends PersistentEntity> targetClass, Class<? extends Collection> collectionClass, Object value) throws Exception {
         if (value instanceof Iterable == false) {
             throw new IllegalArgumentException("Parent should be saved as Iterable<Key>: " + value);
         }

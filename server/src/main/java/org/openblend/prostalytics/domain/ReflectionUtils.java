@@ -46,7 +46,13 @@ public class ReflectionUtils {
         }
         try {
             Key id = target.getId();
-            Entity entity = (id == null) ? new Entity(target.getKind()) : new Entity(id);
+            Entity entity;
+            if (id == null) {
+                entity = new Entity(target.getKind());
+                ds.put(entity); // put, so we get id
+            } else {
+                entity = new Entity(id);
+            }
             current.put(target, entity);
             toEntity(target, entity, target.getClass());
             ds.put(entity);

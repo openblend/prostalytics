@@ -5,18 +5,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-import com.google.appengine.api.datastore.KeyFactory;
-import org.openblend.prostalytics.dao.PatientDAO;
-import org.openblend.prostalytics.domain.Patient;
-
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import org.openblend.prostalytics.dao.PatientDAO;
+import org.openblend.prostalytics.domain.Patient;
 import org.openblend.prostalytics.domain.ReflectionUtils;
 
 /**
@@ -38,23 +35,17 @@ public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
                 //TODO update existing patients
                 //generate code for new inserts
                 String code = patient.getCode();
-                if (code == null || "".equals(code)){
+                if (code == null || "".equals(code)) {
                     patient.setCode(randomString(5));
                 }
-                Entity entity = ReflectionUtils.toEntity(patient);
-                Key key = ds.put(entity);
-                return KeyFactory.keyToString(key);
+                return KeyFactory.keyToString(ReflectionUtils.save(patient));
             }
         });
     }
 
     @Override
     public Patient loadPatient(String id) {
-        try {
-            return ReflectionUtils.fromEntity(Patient.class, ds.get(KeyFactory.stringToKey(id)));
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return ReflectionUtils.load(Patient.class, KeyFactory.stringToKey(id));
     }
 
     @Override
@@ -75,8 +66,10 @@ public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
         List<Query.Filter> filters = new ArrayList<Query.Filter>();
         if (notEmpty(code)) filters.add(new Query.FilterPredicate(Patient.CODE, Query.FilterOperator.EQUAL, code));
         if (notEmpty(name)) filters.add(new Query.FilterPredicate(Patient.NAME, Query.FilterOperator.EQUAL, name));
-        if (notEmpty(surname)) filters.add(new Query.FilterPredicate(Patient.SURNAME, Query.FilterOperator.EQUAL, surname));
-        if (notEmpty(externalId)) filters.add(new Query.FilterPredicate(Patient.EXTERNAL_ID, Query.FilterOperator.EQUAL, externalId));
+        if (notEmpty(surname))
+            filters.add(new Query.FilterPredicate(Patient.SURNAME, Query.FilterOperator.EQUAL, surname));
+        if (notEmpty(externalId))
+            filters.add(new Query.FilterPredicate(Patient.EXTERNAL_ID, Query.FilterOperator.EQUAL, externalId));
 
         if (filters.size() > 1) {
             query.setFilter(new Query.CompositeFilter(Query.CompositeFilterOperator.AND, filters));
@@ -95,9 +88,9 @@ public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
     private String randomString(int len) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rnd = new Random();
-        StringBuilder sb = new StringBuilder( len );
-        for( int i = 0; i < len; i++ )
-            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
 

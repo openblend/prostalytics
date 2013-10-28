@@ -3,7 +3,9 @@ package org.openblend.prostalytics.domain;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -15,6 +17,21 @@ import com.google.appengine.api.datastore.Key;
  */
 public class ReflectionUtils {
     private static final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+    public static Key save(PersistentEntity target) {
+        Entity entity = toEntity(target);
+        return ds.put(entity);
+    }
+
+    public static <T extends PersistentEntity> T load(Class<T> targetClass, Key id) {
+        Map<Key, Entity> map = ds.get(Collections.singleton(id));
+        if (map.isEmpty() == false) {
+            Entity entity = map.entrySet().iterator().next().getValue();
+            return fromEntity(targetClass, entity);
+        } else {
+            return null;
+        }
+    }
 
     public static Entity toEntity(PersistentEntity target) {
         try {

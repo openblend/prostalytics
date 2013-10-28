@@ -1,16 +1,14 @@
 package org.openblend.prostalytics.domain;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import java.util.List;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class Patient implements Serializable, PersistentEntity {
+public class Patient extends AbstractPersistentEntity {
     private static final long serialVersionUID = 1L;
 
     public static final String KIND = Patient.class.getSimpleName().toUpperCase();
@@ -21,14 +19,12 @@ public class Patient implements Serializable, PersistentEntity {
     public static final String BIRTH_DATE = "birthDate";
     public static final String EXTERNAL_ID = "externalId";
 
-    @Ignore
-    private Key id;
-
     private String code;
     private String name;
     private String surname;
     private Date birthDate;
     private String externalId;
+    @Children(Followup.class) private List<Followup> followups;
 
     public Patient() {
     }
@@ -39,14 +35,6 @@ public class Patient implements Serializable, PersistentEntity {
         this.surname = surname;
         this.birthDate = birthDate;
         this.externalId = externalId;
-    }
-
-    public Key getId() {
-        return id;
-    }
-
-    public void setId(Key id) {
-        this.id = id;
     }
 
     public String getKind() {
@@ -75,5 +63,17 @@ public class Patient implements Serializable, PersistentEntity {
 
     public String getExternalId() {
         return externalId;
+    }
+
+    public List<Followup> getFollowups() {
+        return Collections.unmodifiableList(followups);
+    }
+
+    public synchronized void addFollowup(Followup followup) {
+        if (followups == null) {
+            followups = new ArrayList<Followup>();
+        }
+        followup.setPatient(this);
+        followups.add(followup);
     }
 }

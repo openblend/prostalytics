@@ -23,21 +23,21 @@ public interface PatientDAO {
      */
 	@POST
 	@Path("/")
-	public long savePatient(Patient patient);
+	public String savePatient(Patient patient);
 
     /*
      * curl -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" -H "Accept: application/json"  http://localhost:8080/prostalytics/rest/patient/1
      */
     @GET
     @Path("/{id}")
-    public Patient loadPatient(@PathParam("id") long id);
+    public Patient loadPatient(@PathParam("id") String id);
 
     /*
     * curl -XDELETE -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" http://localhost:8080/prostalytics/rest/patient/1
     */
     @DELETE
     @Path("/{id}")
-    public void deletePatient(@PathParam("id") long id);
+    public void deletePatient(@PathParam("id") String id);
 
     /*
      * curl -H "Cookie: JSESSIONID=g0iWpZ4uZY2LE+68S8icQFe7" -H "Accept: application/json" "http://localhost:8080/prostalytics/rest/patient/find?name=John&surname=Doe"

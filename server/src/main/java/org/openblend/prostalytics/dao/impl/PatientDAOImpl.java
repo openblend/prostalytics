@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import org.openblend.prostalytics.dao.PatientDAO;
 import org.openblend.prostalytics.domain.Patient;
 
@@ -16,54 +17,52 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import org.openblend.prostalytics.domain.ReflectionUtils;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class PatientDAOImpl extends AbstractDAOImpl implements PatientDAO {
-    protected static Key toKey(long id) {
-        return toKey(Patient.KIND, id);
-    }
-
     protected static final Function<Entity, Patient> FN = new Function<Entity, Patient>() {
         @Override
         public Patient apply(Entity input) {
-            return Patient.create(input);
+            return ReflectionUtils.fromEntity(Patient.class, input);
         }
     };
 
     @Override
-    public long savePatient(final Patient patient) {
-        return inTx(new Callable<Long>() {
+    public String savePatient(final Patient patient) {
+        return inTx(new Callable<String>() {
             @Override
-            public Long call() throws Exception {
+            public String call() throws Exception {
                 //TODO update existing patients
-                Entity pEntitiy = patient.toEntity();
                 //generate code for new inserts
                 String code = patient.getCode();
                 if (code == null || "".equals(code)){
-                    pEntitiy.setProperty(Patient.CODE, randomString(5));
+                    patient.setCode(randomString(5));
                 }
-                return ds.put(pEntitiy).getId();
+                Entity entity = ReflectionUtils.toEntity(patient);
+                Key key = ds.put(entity);
+                return KeyFactory.keyToString(key);
             }
         });
     }
 
     @Override
-    public Patient loadPatient(long id) {
+    public Patient loadPatient(String id) {
         try {
-            return Patient.create(ds.get(toKey(id)));
+            return ReflectionUtils.fromEntity(Patient.class, ds.get(KeyFactory.stringToKey(id)));
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deletePatient(final long id) {
+    public void deletePatient(final String id) {
         inTx(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                ds.delete(toKey(id));
+                ds.delete(KeyFactory.stringToKey(id));
                 return null;
             }
         });

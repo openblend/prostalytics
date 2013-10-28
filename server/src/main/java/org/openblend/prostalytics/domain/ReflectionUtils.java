@@ -3,6 +3,7 @@ package org.openblend.prostalytics.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.google.appengine.api.datastore.Key;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class ReflectionUtils {
+    private static final ThreadLocal<Map<Object, Object>> reentered = new ThreadLocal<Map<Object, Object>>();
     private static final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
     public static Key save(PersistentEntity target) {
@@ -33,25 +35,50 @@ public class ReflectionUtils {
     }
 
     public static Entity toEntity(PersistentEntity target) {
+        Map<Object, Object> current = reentered.get();
+        if (current == null) {
+            current = new HashMap<Object, Object>();
+            reentered.set(current);
+        }
+        Entity re = (Entity) current.get(target);
+        if (re != null) {
+            return re;
+        }
         try {
             Key id = target.getId();
             Entity entity = (id == null) ? new Entity(target.getKind()) : new Entity(id);
+            current.put(target, entity);
             toEntity(target, entity, target.getClass());
             ds.put(entity);
             return entity;
         } catch (Exception e) {
             throw new IllegalStateException(e);
+        } finally {
+            reentered.remove();
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends PersistentEntity> T fromEntity(Class<T> targetClass, Entity entity) {
+        Map<Object, Object> current = reentered.get();
+        if (current == null) {
+            current = new HashMap<Object, Object>();
+            reentered.set(current);
+        }
+        T re = (T) current.get(entity.getKey());
+        if (re != null) {
+            return re;
+        }
         try {
             T instance = targetClass.newInstance();
             instance.setId(entity.getKey());
+            current.put(entity.getKey(), instance);
             fromEntity(instance, entity, targetClass);
             return instance;
         } catch (Exception e) {
             throw new IllegalStateException(e);
+        } finally {
+            reentered.remove();
         }
     }
 
@@ -79,7 +106,7 @@ public class ReflectionUtils {
     @SuppressWarnings("unchecked")
     static Object saveChildren(Object value) {
         if (value instanceof Iterable == false) {
-            throw new IllegalArgumentException("Children should be instance of Iterable: " + value);
+            throw new IllegalArgumentException("Children should be instance of Iterable<PersistentEntity>: " + value);
         }
         Iterable<PersistentEntity> iter = Iterable.class.cast(value);
         List<Key> keys = new ArrayList<Key>();
@@ -108,8 +135,7 @@ public class ReflectionUtils {
             throw new IllegalArgumentException("Parent should be saved as Key: " + value);
         }
         Key id = Key.class.cast(value);
-        Entity entity = ds.get(id);
-        return fromEntity(targetClass, entity);
+        return load(targetClass, id);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,8 +146,7 @@ public class ReflectionUtils {
         Collection<Object> collection = collectionClass.newInstance();
         Iterable<Key> ids = Iterable.class.cast(value);
         for (Key id : ids) {
-            Entity entity = ds.get(id);
-            collection.add(fromEntity(targetClass, entity));
+            collection.add(load(targetClass, id));
         }
         return collection;
     }

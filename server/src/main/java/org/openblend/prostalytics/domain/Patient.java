@@ -76,4 +76,11 @@ public class Patient extends AbstractPersistentEntity {
         followup.setPatient(this);
         followups.add(followup);
     }
+
+    public synchronized void removeFollowup(Followup followup) {
+        if (followups != null) {
+            followup.setPatient(null);
+            followups.remove(followup);
+        }
+    }
 }

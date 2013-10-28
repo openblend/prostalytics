@@ -73,13 +73,7 @@ public class ReflectionUtils {
             throw new IllegalArgumentException("Parent should be instance of PersistentEntity: " + parent);
         }
         PersistentEntity pe = PersistentEntity.class.cast(parent);
-        Key key = pe.getId();
-        if (key == null) {
-            Entity parentEntity = toEntity(pe);
-            ds.put(parentEntity);
-            key = parentEntity.getKey();
-        }
-        return key;
+        return toEntity(pe).getKey();
     }
 
     @SuppressWarnings("unchecked")
@@ -90,12 +84,7 @@ public class ReflectionUtils {
         Iterable<PersistentEntity> iter = Iterable.class.cast(value);
         List<Key> keys = new ArrayList<Key>();
         for (PersistentEntity pe : iter) {
-            Key key = pe.getId();
-            if (key == null) {
-                Entity childEntity = toEntity(pe);
-                ds.put(childEntity);
-                keys.add(childEntity.getKey());
-            }
+            keys.add(toEntity(pe).getKey());
         }
         return keys;
     }

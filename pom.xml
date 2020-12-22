@@ -37,7 +37,7 @@
         <version.javax.el>1.2</version.javax.el>
         <version.javax.el.impl>1.2</version.javax.el.impl>
         <version.org.codehaus.jackson>1.9.12</version.org.codehaus.jackson>
-        <version.junit>4.10</version.junit>
+        <version.junit>4.13.1</version.junit>
     </properties>
 
     <build>

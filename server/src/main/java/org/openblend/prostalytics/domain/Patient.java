@@ -1,14 +1,14 @@
 package org.openblend.prostalytics.domain;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-
-import com.google.appengine.api.datastore.Entity;
+import java.util.List;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class Patient implements Serializable {
+public class Patient extends AbstractPersistentEntity {
     private static final long serialVersionUID = 1L;
 
     public static final String KIND = Patient.class.getSimpleName().toUpperCase();
@@ -19,13 +19,12 @@ public class Patient implements Serializable {
     public static final String BIRTH_DATE = "birthDate";
     public static final String EXTERNAL_ID = "externalId";
 
-    private long id;
-
     private String code;
     private String name;
     private String surname;
     private Date birthDate;
     private String externalId;
+    @Children(Followup.class) private List<Followup> followups;
 
     public Patient() {
     }
@@ -38,33 +37,16 @@ public class Patient implements Serializable {
         this.externalId = externalId;
     }
 
-    public static Patient create(Entity entity) {
-        Patient p = new Patient();
-        p.id = entity.getKey().getId();
-        p.code = (String) entity.getProperty(CODE);
-        p.name = (String) entity.getProperty(NAME);
-        p.surname = (String) entity.getProperty(SURNAME);
-        p.birthDate = (Date) entity.getProperty(BIRTH_DATE);
-        p.externalId = (String) entity.getProperty(EXTERNAL_ID);
-        return p;
-    }
-
-    public Entity toEntity() {
-        Entity e = new Entity(KIND);
-        e.setProperty(CODE, code);
-        e.setProperty(NAME, name);
-        e.setProperty(SURNAME, surname);
-        e.setProperty(BIRTH_DATE, birthDate);
-        e.setProperty(EXTERNAL_ID, externalId);
-        return e;
-    }
-
-    public long getId() {
-        return id;
+    public String getKind() {
+        return KIND;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -81,5 +63,24 @@ public class Patient implements Serializable {
 
     public String getExternalId() {
         return externalId;
+    }
+
+    public List<Followup> getFollowups() {
+        return Collections.unmodifiableList(followups);
+    }
+
+    public synchronized void addFollowup(Followup followup) {
+        if (followups == null) {
+            followups = new ArrayList<Followup>();
+        }
+        followup.setPatient(this);
+        followups.add(followup);
+    }
+
+    public synchronized void removeFollowup(Followup followup) {
+        if (followups != null) {
+            followup.setPatient(null);
+            followups.remove(followup);
+        }
     }
 }
